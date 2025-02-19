@@ -24,9 +24,12 @@
     ],
     "paths": {
       "@/components/*": ["components/*"],
-      "@/lib/*": ["lib/*"],
       "@/types/*": ["types/*"],
-      "@/constants/*": ["constants/*"]
+      "@/actions/*": ["app/actions/*"],
+      "@/constants/*": ["constants/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/utils/*": ["utils/*"],
+      "@/schemas/*": ["schemas/*"]
     },
     "target": "ES2017"
   },
