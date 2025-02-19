@@ -22,8 +22,8 @@ export const TravelBarChart = ({ className }: { className?: string }) => {
   }
 
   return (
-    <div className="mx-auto w-full max-w-4xl p-4 lg:p-6">
-      <div className="rounded-lg bg-white p-4 lg:p-6">
+    <div className="mx-auto w-full max-w-4xl p-3">
+      <div className="rounded-lg bg-white">
         <Form onSubmit={handleCitySubmit} message={message} />
         <div className={`relative mt-6 min-h-[500px] w-full ${className || ''}`}>
           {isLoading ? (

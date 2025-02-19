@@ -1,12 +1,12 @@
 import { fetchTravelData } from '@/actions/amadeus-travel-data'
-import { optionsSkeleton } from '@/constants/TravelBarChart'
-import { MessageState } from '@/types/travelBarChart'
+import { travelBarChartSchema } from '@/schemas/charts'
+import type { MessageState } from '@/types/travelBarChart'
 import { formatAmadeusData } from '@/utils/formatAmadeusData'
 import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
 
 export const useAmadeusChart = () => {
-  const [options, setOptions] = useState<EChartsOption>(optionsSkeleton)
+  const [options, setOptions] = useState<EChartsOption>(travelBarChartSchema)
   const [message, setMessage] = useState<MessageState>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 

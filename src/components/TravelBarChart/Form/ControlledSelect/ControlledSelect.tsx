@@ -1,5 +1,5 @@
 import { CITY_OPTIONS, placeholder } from '@/constants/TravelBarChart'
-import { CityOptionsKey } from '@/types/travelBarChart'
+import type { CityOptionsKey } from '@/types/travelBarChart'
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { Control, Controller, FieldValues, UseFormHandleSubmit } from 'react-hook-form'
 
@@ -26,8 +26,8 @@ export const ControlledSelect = ({
             handleSubmit(processForm)()
           }}
         >
-          <div className="relative z-10">
-            <ListboxButton className="w-full rounded-md border bg-white p-2 shadow-sm focus:outline-none">
+          <div className="relative z-10 m-2">
+            <ListboxButton className="flex w-full justify-center rounded-lg bg-black p-2 text-sm font-bold text-white shadow-sm hover:bg-black/80 focus:outline-none sm:w-4/12 md:m-auto lg:m-0 lg:ml-auto xl:text-lg">
               {CITY_OPTIONS[field.value as CityOptionsKey] || placeholder}
             </ListboxButton>
             <ListboxOptions className="absolute mt-1 w-full rounded-md border bg-white shadow-lg">

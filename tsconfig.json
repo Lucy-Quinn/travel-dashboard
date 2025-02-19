@@ -28,7 +28,8 @@
       "@/actions/*": ["app/actions/*"],
       "@/constants/*": ["constants/*"],
       "@/hooks/*": ["hooks/*"],
-      "@/utils/*": ["utils/*"]
+      "@/utils/*": ["utils/*"],
+      "@/schemas/*": ["schemas/*"]
     },
     "target": "ES2017"
   },
