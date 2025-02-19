@@ -1,8 +1,7 @@
-import { optionsSkeleton } from '@/components/TravelBarChart/constants'
-import type { AmadeusResponse } from '@/types/amadeus'
-
+import { optionsSkeleton } from '@/constants/TravelBarChart'
+import type { AmadeusDestinationRecommendation } from '@/types/amadeus'
 interface formatAmadeusDataProps {
-  travelData: AmadeusResponse[]
+  travelData: AmadeusDestinationRecommendation[]
   cityOrigin: string
 }
 

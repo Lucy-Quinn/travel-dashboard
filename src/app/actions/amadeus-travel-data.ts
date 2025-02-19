@@ -1,12 +1,17 @@
 'use server'
 
 import { AMADEUS_CONFIG, MESSAGES } from '@/constants/serverActions'
+import type {
+  AmadeusAPIResponse,
+  AmadeusAuthResponse,
+  AmadeusDestinationResponse,
+} from '@/types/amadeus'
 
-export async function fetchTravelData(cityCode: string) {
+export async function fetchTravelData(cityCode: string): Promise<AmadeusAPIResponse> {
   try {
-    const { clientId, clientSecret } = AMADEUS_CONFIG
+    const { clientId, clientSecret, apiUrl } = AMADEUS_CONFIG
 
-    if (!clientId || !clientSecret) {
+    if (!clientId || !clientSecret || !apiUrl) {
       console.error('[API] Missing Amadeus configuration')
       return {
         success: false,
@@ -17,7 +22,7 @@ export async function fetchTravelData(cityCode: string) {
     let token = ''
 
     try {
-      const url = `https://test.api.amadeus.com/v1/security/oauth2/token`
+      const url = `${apiUrl}/security/oauth2/token`
       const urlencoded = new URLSearchParams({
         grant_type: 'client_credentials',
         client_id: clientId,
@@ -32,7 +37,7 @@ export async function fetchTravelData(cityCode: string) {
         body: urlencoded.toString(),
       })
 
-      const responseData = await response.json()
+      const responseData: AmadeusAuthResponse = await response.json()
 
       if (!responseData.state) {
         console.error('[API] Fetching Amadeus token error:', responseData)
@@ -42,7 +47,7 @@ export async function fetchTravelData(cityCode: string) {
         }
       }
 
-      token = responseData.access_token
+      token = responseData.access_token || ''
     } catch (error) {
       console.error('[API] Error fetching token:', error)
       return {
@@ -52,15 +57,15 @@ export async function fetchTravelData(cityCode: string) {
     }
 
     try {
-      const travelResponse = await fetch(
-        `https://test.api.amadeus.com/v1/reference-data/recommended-locations?cityCodes=${cityCode}`,
+      const travelResponse: Response = await fetch(
+        `${apiUrl}/reference-data/recommended-locations?cityCodes=${cityCode}`,
         {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
         },
       )
 
-      const travelResponseData = await travelResponse.json()
+      const travelResponseData: AmadeusDestinationResponse = await travelResponse.json()
 
       if (!travelResponseData.data) {
         console.error('[API] Fetching Amadeus token error:', travelResponseData)

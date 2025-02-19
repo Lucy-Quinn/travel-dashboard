@@ -1,22 +1,27 @@
 import { fetchTravelData } from '@/actions/amadeus-travel-data'
-import { optionsSkeleton } from '@/components/TravelBarChart/constants'
+import { optionsSkeleton } from '@/constants/TravelBarChart'
+import { MessageState } from '@/types/travelBarChart'
 import { formatAmadeusData } from '@/utils/formatAmadeusData'
+import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
 
 export const useAmadeusChart = () => {
-  const [options, setOptions] = useState(optionsSkeleton)
-  const [message, setMessage] = useState<{ success?: string; error?: string } | null>(
-    null,
-  )
-  const [isLoading, setIsLoading] = useState(false)
+  const [options, setOptions] = useState<EChartsOption>(optionsSkeleton)
+  const [message, setMessage] = useState<MessageState>(undefined)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const fetchAndUpdateChart = async (city: string) => {
+  const fetchAndUpdateChart = async (city: string): Promise<void> => {
     try {
       setIsLoading(true)
       const travelResponse = await fetchTravelData(city)
 
       if (!travelResponse.success) {
         setMessage({ error: 'An error occurred' })
+        return
+      }
+
+      if (!travelResponse.data) {
+        setMessage({ error: 'No data received' })
         return
       }
 

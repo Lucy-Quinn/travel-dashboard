@@ -1,6 +1,7 @@
 export const AMADEUS_CONFIG = {
   clientId: process.env.API_KEY,
   clientSecret: process.env.API_SECRET,
+  apiUrl: process.env.AMADEUS_API_URL,
 }
 
 export const MESSAGES = {
