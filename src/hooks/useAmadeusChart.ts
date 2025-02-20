@@ -1,4 +1,4 @@
-import { fetchTravelData } from '@/actions/amadeus-travel-data'
+import { fetchRecommendedDestinations } from '@/actions/recommended-destinations'
 import { travelBarChartSchema } from '@/schemas/charts'
 import type { MessageState } from '@/types/travelBarChart'
 import { formatAmadeusData } from '@/utils/formatAmadeusData'
@@ -13,7 +13,7 @@ export const useAmadeusChart = () => {
   const fetchAndUpdateChart = async (city: string): Promise<void> => {
     try {
       setIsLoading(true)
-      const travelResponse = await fetchTravelData(city)
+      const travelResponse = await fetchRecommendedDestinations(city)
 
       if (!travelResponse.success) {
         setMessage({ error: 'An error occurred' })
