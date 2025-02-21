@@ -1,6 +1,6 @@
 import { CITY_OPTIONS } from '@/constants/TravelBarChart'
-import { travelBarChartSchema } from '@/schemas/charts'
-import type { AmadeusDestinationRecommendation } from '@/types/amadeus'
+import { barChartSchema } from '@/schemas/charts'
+import type { DestinationRecommendation } from '@/types/amadeus'
 import type { CityOptionsKey } from '@/types/travelBarChart'
 
 const generateTitleText = (cityOrigin: string, isMobile: boolean = false) => {
@@ -9,13 +9,16 @@ const generateTitleText = (cityOrigin: string, isMobile: boolean = false) => {
   return isMobile ? `${baseText}\n${cityName}` : `${baseText} ${cityName}`
 }
 
-interface formatAmadeusDataProps {
-  travelData: AmadeusDestinationRecommendation[]
+interface FormatDestinationBarChartProps {
+  travelData: DestinationRecommendation[]
   cityOrigin: string
 }
 
-export const formatAmadeusData = ({ travelData, cityOrigin }: formatAmadeusDataProps) => {
-  const newOptions = JSON.parse(JSON.stringify(travelBarChartSchema))
+export const formatDestinationBarChart = ({
+  travelData,
+  cityOrigin,
+}: FormatDestinationBarChartProps) => {
+  const barChartSchemaOptions = JSON.parse(JSON.stringify(barChartSchema))
 
   return travelData.reduce((acc, curr, index) => {
     const { name, relevance } = curr
@@ -26,5 +29,5 @@ export const formatAmadeusData = ({ travelData, cityOrigin }: formatAmadeusDataP
       acc.media[0].option.title.text = generateTitleText(cityOrigin, true)
     }
     return acc
-  }, newOptions)
+  }, barChartSchemaOptions)
 }

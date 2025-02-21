@@ -1,2 +1,3 @@
 export * from './api'
-export * from './formatAmadeusData'
+export * from './formatters'
+export * from './formatters/charts/barChartFormatter'

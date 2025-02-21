@@ -1,1 +1,2 @@
-export * from './useAmadeusChart'
+export * from './useAmadeusBarChart'
+export * from './useAmadeusFlightMap'

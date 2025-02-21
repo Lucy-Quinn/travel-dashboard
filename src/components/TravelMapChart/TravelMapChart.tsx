@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchFlightInspiration } from '@/actions/flight-inspiration'
+import { useAmadeusFlightMap } from '@/hooks/useAmadeusFlightMap'
 import ReactECharts from 'echarts-for-react'
 import { MapChart } from 'echarts/charts'
 import { GeoComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
@@ -15,50 +15,9 @@ echarts.use([
   VisualMapComponent,
   CanvasRenderer,
 ])
-
-const options = {
-  title: {
-    text: 'Flight Destinations',
-    left: 'center',
-    textStyle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
-  },
-  tooltip: {
-    trigger: 'item',
-  },
-  visualMap: {
-    type: 'continuous',
-    min: 0,
-    max: 100,
-    text: ['High', 'Low'],
-    realtime: false,
-    calculable: true,
-    inRange: {
-      color: ['#e0f3f8', '#2c7bb6'],
-    },
-  },
-  series: [
-    {
-      type: 'map',
-      map: 'world',
-      roam: true,
-      itemStyle: {
-        borderColor: '#ffffff',
-        borderWidth: 1,
-        areaColor: '#b3cde0',
-        emphasis: {
-          areaColor: '#005b96',
-        },
-      },
-    },
-  ],
-}
-
 export const TravelMapChart = () => {
   const [mapReady, setMapReady] = useState<boolean>(false)
-  // const [showChart, setShowChart] = useState<boolean>(false)
+  const { options, fetchAndUpdateFlightMap, message, isLoading } = useAmadeusFlightMap()
 
   useEffect(() => {
     const fetchMap = async () => {
@@ -76,10 +35,10 @@ export const TravelMapChart = () => {
   }, [])
 
   const loadChartData = async (): Promise<void> => {
-    const flightData = await fetchFlightInspiration()
-    console.log('🚀 ~ loadChartData ~ flightData:', flightData)
+    const flightData = await fetchAndUpdateFlightMap('MAD')
+    // console.log('🚀 ~ loadChartData ~ flightData:', flightData)
     // setShowChart(true)
-    console.log('loadChartData')
+    // console.log('loadChartData')
   }
 
   return (

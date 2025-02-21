@@ -3,14 +3,14 @@
 import { AMADEUS_CONFIG, MESSAGES } from '@/constants/serverActions'
 import type {
   AmadeusAPIResponse,
-  AmadeusDestinationRecommendation,
-  AmadeusDestinationResponse,
+  DestinationRecommendation,
+  ServerActionResponse,
 } from '@/types/amadeus'
 import { getAmadeusToken } from '@/utils/api/amadeus'
 
 export async function fetchRecommendedDestinations(
   cityCode: string,
-): Promise<AmadeusAPIResponse<AmadeusDestinationRecommendation>> {
+): Promise<ServerActionResponse<DestinationRecommendation>> {
   try {
     const { apiUrl } = AMADEUS_CONFIG
 
@@ -43,9 +43,8 @@ export async function fetchRecommendedDestinations(
         }
       }
 
-      const travelResponseData: AmadeusDestinationResponse<AmadeusDestinationRecommendation> =
+      const travelResponseData: AmadeusAPIResponse<DestinationRecommendation> =
         await travelResponse.json()
-      console.log('🚀 ~ travelResponseData FIRST:', travelResponseData)
 
       if (!travelResponseData.data) {
         console.error(

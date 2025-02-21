@@ -1,16 +1,16 @@
 import { fetchRecommendedDestinations } from '@/actions/recommended-destinations'
-import { travelBarChartSchema } from '@/schemas/charts'
+import { barChartSchema } from '@/schemas/charts'
 import type { MessageState } from '@/types/travelBarChart'
-import { formatAmadeusData } from '@/utils/formatAmadeusData'
+import { formatDestinationBarChart } from '@/utils/formatters/charts/barChartFormatter'
 import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
 
-export const useAmadeusChart = () => {
-  const [options, setOptions] = useState<EChartsOption>(travelBarChartSchema)
+export const useAmadeusBarChart = () => {
+  const [options, setOptions] = useState<EChartsOption>(barChartSchema)
   const [message, setMessage] = useState<MessageState>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const fetchAndUpdateChart = async (city: string): Promise<void> => {
+  const fetchAndUpdateBarChart = async (city: string): Promise<void> => {
     try {
       setIsLoading(true)
       const travelResponse = await fetchRecommendedDestinations(city)
@@ -25,18 +25,17 @@ export const useAmadeusChart = () => {
         return
       }
 
-      const {
-        success,
-        message,
-        data: { data: travelData },
-      } = travelResponse
+      const { success, message, data: travelData } = travelResponse
 
       if (!success) {
         setMessage({ error: message })
         return
       }
 
-      const formattedOptions = formatAmadeusData({ travelData, cityOrigin: city })
+      const formattedOptions = formatDestinationBarChart({
+        travelData,
+        cityOrigin: city,
+      })
       setOptions(formattedOptions)
       setMessage({ success: message })
       setIsLoading(false)
@@ -47,5 +46,5 @@ export const useAmadeusChart = () => {
     }
   }
 
-  return { options, fetchAndUpdateChart, message, isLoading }
+  return { options, fetchAndUpdateBarChart, message, isLoading }
 }

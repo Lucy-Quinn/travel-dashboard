@@ -1,14 +1,12 @@
-// // Server action responses
-// export type ServerActionResponse<T> = {
-//     success: boolean
-//     message?: string
-//     data?: AmadeusResponse<T>
-//   }
-
-export type AmadeusAPIResponse<T> = {
+export type ServerActionResponse<T> = {
   success: boolean
   message?: string
   data?: T[]
+}
+
+export type AmadeusAPIResponse<T> = {
+  data: T[]
+  error_description?: string
 }
 
 export type AmadeusAuthResponse = {
@@ -17,12 +15,7 @@ export type AmadeusAuthResponse = {
   error_description?: string
 }
 
-export type AmadeusDestinationResponse<T> = {
-  data: T[]
-  error_description?: string
-}
-
-export type AmadeusDestinationRecommendation = {
+export type DestinationRecommendation = {
   subtype: string
   name: string
   iataCode: string
@@ -34,7 +27,7 @@ export type AmadeusDestinationRecommendation = {
   relevance: number
 }
 
-export type AmadeusFlightInspiration = {
+export type FlightInspiration = {
   type: string
   origin: string
   destination: string
@@ -45,31 +38,33 @@ export type AmadeusFlightInspiration = {
   }
 }
 
-export type AmadeusFlightInspirationResponse = {
-  destination: string
+export type FlightLocation = {
+  type: string
+  subType: string
+  name: string
+  detailedName: string
+  id: string
+  iataCode: string
+  geoCode: {
+    latitude: number
+    longitude: number
+  }
+  address: {
+    cityName: string
+    cityCode: string
+    countryName: string
+    countryCode: string
+    regionCode: string
+  }
+}
+
+export type FlightDestinationWithPrice = {
+  airportName: string
+  iataCode: string
+  cityName: string
   total: number
   geoCode: {
     latitude: number
     longitude: number
   }
 }
-
-// export type AmadeusFlightLocationDetails = {
-//   type: string
-//   subType: string
-//   name: string
-//   detailedName: string
-//   id: string
-//   iataCode: string
-//   geoCode: {
-//     latitude: number
-//     longitude: number
-//   }
-//   address: {
-//     cityName: string
-//     cityCode: string
-//     countryName: string
-//     countryCode: string
-//     regionCode: string
-//   }
-// }

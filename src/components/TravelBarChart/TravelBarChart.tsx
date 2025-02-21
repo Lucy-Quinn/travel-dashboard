@@ -1,5 +1,5 @@
 'use client'
-import { useAmadeusChart } from '@/hooks/useAmadeusChart'
+import { useAmadeusBarChart } from '@/hooks/useAmadeusBarChart'
 import ReactECharts from 'echarts-for-react'
 import { useState } from 'react'
 import { EmptyState } from './EmptyState'
@@ -7,11 +7,11 @@ import { Form } from './Form'
 import { LoadingSpinner } from './LoadingSpinner'
 
 export const TravelBarChart = ({ className }: { className?: string }) => {
-  const { options, fetchAndUpdateChart, message, isLoading } = useAmadeusChart()
+  const { options, fetchAndUpdateBarChart, message, isLoading } = useAmadeusBarChart()
   const [showChart, setShowChart] = useState<boolean>(false)
 
   const loadChartData = async (city: string): Promise<void> => {
-    await fetchAndUpdateChart(city)
+    await fetchAndUpdateBarChart(city)
     setShowChart(true)
   }
 
