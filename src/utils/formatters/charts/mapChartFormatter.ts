@@ -1,5 +1,6 @@
 import { mapChartSchema } from '@/schemas/charts'
 import type { FlightDestinationWithPrice } from '@/types/amadeus'
+import cloneDeep from 'lodash/cloneDeep'
 
 interface FormatFlightMapProps {
   flightData: FlightDestinationWithPrice[]
@@ -7,7 +8,7 @@ interface FormatFlightMapProps {
 }
 
 export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps) => {
-  const mapSchemaOptions = JSON.parse(JSON.stringify(mapChartSchema))
+  const mapSchemaOptions = cloneDeep(mapChartSchema)
 
   const { geoCode: { latitude, longitude } = { latitude: 0, longitude: 0 } } =
     flightData.find(({ iataCode }) => iataCode === cityOrigin) ?? {}
@@ -26,7 +27,8 @@ export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps
 
     if (iataCode === cityOrigin) {
       // Origin city
-      acc.series[0].data.push({
+      // @ts-expect-error - This is a valid series index
+      acc.series?.[0].data.push({
         name: `${airportName} (${cityName})`,
         value: [...coordinates, 0],
         itemStyle: {
@@ -36,18 +38,20 @@ export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps
       })
     } else {
       // Destination cities
-      acc.series[0].data.push({
+      // @ts-expect-error - This is a valid series index
+      acc.series?.[0].data.push({
         name: `${airportName} AIRPORT (${cityName})`,
         value: [...coordinates, total],
         symbolSize: 8,
       })
-
       // Flight routes
-      acc.series[1].data.push({
+      // @ts-expect-error - This is a valid series index
+      acc.series?.[1].data.push({
         coords: [originCityCoordinates, coordinates],
         value: total,
       })
     }
+
     return acc
   }, mapSchemaOptions)
 

@@ -1,10 +1,9 @@
-import { CITY_OPTIONS } from '@/constants/TravelBarChart'
+import { CITY_OPTIONS } from '@/constants/travelChart'
 import { barChartSchema } from '@/schemas/charts'
 import type { DestinationRecommendation } from '@/types/amadeus'
-import type { CityOptionsKey } from '@/types/travelBarChart'
 
 const generateTitleText = (cityOrigin: string, isMobile: boolean = false) => {
-  const cityName = CITY_OPTIONS[cityOrigin as CityOptionsKey]
+  const cityName = CITY_OPTIONS[cityOrigin as keyof typeof CITY_OPTIONS]
   const baseText = 'Recommended Destinations From'
   return isMobile ? `${baseText}\n${cityName}` : `${baseText} ${cityName}`
 }

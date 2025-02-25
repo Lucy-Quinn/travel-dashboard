@@ -1,16 +1,18 @@
 import { fetchRecommendedDestinations } from '@/actions/recommended-destinations'
 import { barChartSchema } from '@/schemas/charts'
-import type { MessageState } from '@/types/travelBarChart'
+import type { MessageState } from '@/types/travelChart'
 import { formatDestinationBarChart } from '@/utils/formatters/charts/barChartFormatter'
 import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
+import { FieldValues } from 'react-hook-form'
 
 export const useAmadeusBarChart = () => {
   const [options, setOptions] = useState<EChartsOption>(barChartSchema)
   const [message, setMessage] = useState<MessageState>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const fetchAndUpdateBarChart = async (city: string): Promise<void> => {
+  const fetchAndUpdateBarChart = async (location: FieldValues): Promise<void> => {
+    const { city } = location
     try {
       setIsLoading(true)
       const travelResponse = await fetchRecommendedDestinations(city)

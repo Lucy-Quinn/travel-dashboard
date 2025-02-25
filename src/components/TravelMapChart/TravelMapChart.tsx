@@ -1,24 +1,26 @@
 'use client'
 
+import { FormWrapper } from '@/components/Form'
+import { ControlledSelect } from '@/components/Form/ControlledSelect'
+import { FeedbackMessage } from '@/components/Form/FeedbackMessage'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
+import {
+  AIRPORT_OPTIONS_PLACEHOLDER,
+  CITY_AIRPORT_MAP,
+  CITY_OPTIONS,
+  CITY_OPTIONS_PLACEHOLDER,
+} from '@/constants/travelChart'
 import { useAmadeusFlightMap } from '@/hooks/useAmadeusFlightMap'
 import ReactECharts from 'echarts-for-react'
-import { MapChart } from 'echarts/charts'
-import { GeoComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
 import * as echarts from 'echarts/core'
-import { CanvasRenderer } from 'echarts/renderers'
 import { useEffect, useState } from 'react'
-import { Form } from '../TravelBarChart/Form'
-echarts.use([
-  MapChart,
-  GeoComponent,
-  TooltipComponent,
-  VisualMapComponent,
-  CanvasRenderer,
-])
+import { FieldValues } from 'react-hook-form'
+import { generateAirportOptions } from './generateAirportOptions'
+
 export const TravelMapChart = () => {
   const [mapReady, setMapReady] = useState<boolean>(false)
   const { options, fetchAndUpdateFlightMap, message, isLoading } = useAmadeusFlightMap()
-  const [showChart, setShowChart] = useState<boolean>(false)
+  const [selectedCity, setSelectedCity] = useState<string>('')
 
   useEffect(() => {
     const fetchMap = async () => {
@@ -35,39 +37,59 @@ export const TravelMapChart = () => {
     fetchMap()
   }, [])
 
-  const loadChartData = async (city: string): Promise<void> => {
+  const loadChartData = async (data: FieldValues): Promise<void> => {
     try {
-      await fetchAndUpdateFlightMap(city)
-      setShowChart(true)
+      await fetchAndUpdateFlightMap(data)
     } catch (error) {
       console.error('Error in loadChartData:', error)
     }
   }
 
+  const handleCityChange = (value: string) => {
+    setSelectedCity(value)
+  }
+
   return (
     <div>
-      <Form onSubmit={loadChartData} message={message} />
-
-      <button
-        onClick={() => loadChartData('BCN')}
-        className="rounded bg-blue-500 p-2 text-white"
+      <FormWrapper
+        onSubmit={loadChartData}
+        defaultValues={{
+          city: CITY_OPTIONS_PLACEHOLDER,
+          ...(selectedCity && {
+            airport: AIRPORT_OPTIONS_PLACEHOLDER,
+          }),
+        }}
       >
-        Load Flight Data from BCN
-      </button>
+        {({ control }) => (
+          <>
+            <ControlledSelect
+              control={control}
+              options={CITY_OPTIONS}
+              placeholder={CITY_OPTIONS_PLACEHOLDER}
+              name="city"
+              handleChange={handleCityChange}
+            />
+            {selectedCity &&
+              CITY_AIRPORT_MAP[selectedCity as keyof typeof CITY_AIRPORT_MAP] && (
+                <ControlledSelect
+                  control={control}
+                  options={generateAirportOptions(selectedCity)}
+                  placeholder={AIRPORT_OPTIONS_PLACEHOLDER}
+                  name="airport"
+                />
+              )}
+            <FeedbackMessage message={message} />
+          </>
+        )}
+      </FormWrapper>
 
-      {mapReady && (
-        <ReactECharts option={options} style={{ height: '500px', width: '100%' }} />
-      )}
-      {/* {isLoading ? (
+      {isLoading ? (
         <LoadingSpinner />
       ) : (
-        mapReady &&
-        showChart && (
+        mapReady && (
           <ReactECharts option={options} style={{ height: '500px', width: '100%' }} />
         )
       )}
-
-      {!isLoading && !mapReady && <EmptyState />} */}
     </div>
   )
 }

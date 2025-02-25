@@ -29,9 +29,9 @@ export const MESSAGES = {
   FETCH_FLIGHT_INSPIRATION_DATA_INVALID:
     'Invalid data received from Amadeus API flight inspiration. Please try again.',
 
-  // Origin Location
-  FETCH_ORIGIN_LOCATION_REQUEST_FAILED: 'Failed to fetch origin location',
-  FETCH_ORIGIN_LOCATION_DATA_INVALID: 'Invalid origin location data received',
+  // Departure Location
+  FETCH_DEPARTURE_LOCATION_REQUEST_FAILED: 'Failed to fetch departure location',
+  FETCH_DEPARTURE_LOCATION_DATA_INVALID: 'Invalid departure location data received',
 
   // Destination Locations
   FETCH_DESTINATION_LOCATIONS_REQUEST_FAILED: 'Failed to fetch destination locations',

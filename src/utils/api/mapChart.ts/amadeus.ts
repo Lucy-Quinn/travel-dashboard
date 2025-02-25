@@ -1,11 +1,14 @@
 import { getAmadeusToken } from './getAmadeusToken'
+import { getDepartureLocation } from './getDepartureLocation'
 import { getDestinationLocations } from './getDestinationLocations'
 import { getFlightInspiration } from './getFlightInspiration'
-import { getOriginCityLocation } from './getOriginCityLocation'
 
-export const getFlightInspirationWithLocations = async (originCity: string) => {
+export const getFlightInspirationWithLocations = async (
+  city: string,
+  airport: string,
+) => {
   console.log(
-    `[Amadeus API] Starting flight inspiration with locations search from origin: ${originCity}`,
+    `[Amadeus API] Starting flight inspiration with locations search from origin: ${city}`,
   )
 
   const {
@@ -23,7 +26,8 @@ export const getFlightInspirationWithLocations = async (originCity: string) => {
     data: flightInspirationData,
     message: flightInspirationMessage,
   } = await getFlightInspiration({
-    originCity,
+    city,
+    airport,
     token,
   })
 
@@ -36,32 +40,32 @@ export const getFlightInspirationWithLocations = async (originCity: string) => {
   }
 
   const {
-    success: originCityLocationSuccess,
-    data: originCityData,
-    message: originCityLocationMessage,
-  } = await getOriginCityLocation({
-    originCity,
+    success: departureLocationSuccess,
+    data: departureLocationData,
+    message: departureLocationMessage,
+  } = await getDepartureLocation({
+    departureLocation: airport ? airport : city,
     flightData: flightInspirationData,
     token,
   })
 
-  if (!originCityLocationSuccess || originCityData === undefined) {
+  if (!departureLocationSuccess || departureLocationData === undefined) {
     console.error(
-      '[Amadeus API] Error fetching origin city location:',
-      originCityLocationMessage,
+      '[Amadeus API] Error fetching departure location:',
+      departureLocationMessage,
     )
-    return { success: originCityLocationSuccess, message: originCityLocationMessage }
+    return { success: departureLocationSuccess, message: departureLocationMessage }
   }
 
-  const flightDataWithoutOrigin = flightInspirationData.filter(
-    (flight) => flight.iataCode !== originCity,
+  const flightDataWithoutDeparture = flightInspirationData.filter(
+    (flight) => flight.iataCode !== departureLocationData.iataCode,
   )
   const {
     success: destinationLocationsSuccess,
     data: destinationLocationsData,
     message: destinationLocationsMessage,
   } = await getDestinationLocations({
-    flightData: flightDataWithoutOrigin,
+    flightData: flightDataWithoutDeparture,
     token,
   })
 
@@ -73,7 +77,7 @@ export const getFlightInspirationWithLocations = async (originCity: string) => {
     return { success: destinationLocationsSuccess, message: destinationLocationsMessage }
   }
 
-  const flightDataWithLocations = [originCityData, ...destinationLocationsData]
+  const flightDataWithLocations = [departureLocationData, ...destinationLocationsData]
   console.log(
     '[Amadeus API] Flight location details fetched successfully for',
     flightDataWithLocations.length,

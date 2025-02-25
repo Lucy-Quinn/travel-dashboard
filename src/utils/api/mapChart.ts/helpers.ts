@@ -3,8 +3,9 @@ import { AMADEUS_CONFIG, MESSAGES } from '@/constants/serverActions'
 export const AMADEUS_ENDPOINTS = {
   TOKEN: 'token',
   FLIGHT_INSPIRATION: 'flightInspiration',
-  ORIGIN_LOCATION: 'originLocation',
+  DEPARTURE_LOCATION: 'departureLocation',
   DESTINATION_LOCATIONS: 'destinationLocations',
+  RECOMMENDED_DESTINATIONS: 'recommendedDestinations',
 } as const
 
 export type AmadeusEndpoint = (typeof AMADEUS_ENDPOINTS)[keyof typeof AMADEUS_ENDPOINTS]
@@ -19,13 +20,17 @@ export const getServerActionMessages = (endpoint: AmadeusEndpoint) => {
       requestFailed: MESSAGES.FETCH_FLIGHT_INSPIRATION_REQUEST_FAILED,
       dataInvalid: MESSAGES.FETCH_FLIGHT_INSPIRATION_DATA_INVALID,
     },
-    [AMADEUS_ENDPOINTS.ORIGIN_LOCATION]: {
-      requestFailed: MESSAGES.FETCH_ORIGIN_LOCATION_REQUEST_FAILED,
-      dataInvalid: MESSAGES.FETCH_ORIGIN_LOCATION_DATA_INVALID,
+    [AMADEUS_ENDPOINTS.DEPARTURE_LOCATION]: {
+      requestFailed: MESSAGES.FETCH_DEPARTURE_LOCATION_REQUEST_FAILED,
+      dataInvalid: MESSAGES.FETCH_DEPARTURE_LOCATION_DATA_INVALID,
     },
     [AMADEUS_ENDPOINTS.DESTINATION_LOCATIONS]: {
       requestFailed: MESSAGES.FETCH_DESTINATION_LOCATIONS_REQUEST_FAILED,
       dataInvalid: MESSAGES.FETCH_DESTINATION_LOCATIONS_DATA_INVALID,
+    },
+    [AMADEUS_ENDPOINTS.RECOMMENDED_DESTINATIONS]: {
+      requestFailed: MESSAGES.FETCH_RECOMMENDED_DESTINATIONS_REQUEST_FAILED,
+      dataInvalid: MESSAGES.FETCH_RECOMMENDED_DESTINATIONS_DATA_INVALID,
     },
   }
   return messages[endpoint]

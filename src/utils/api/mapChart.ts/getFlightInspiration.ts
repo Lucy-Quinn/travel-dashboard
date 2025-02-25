@@ -1,27 +1,33 @@
-import type { FlightDestinationPrice, ServerActionResponse } from '@/types/amadeus'
-import { AmadeusAPIResponse, FlightInspiration } from '@/types/amadeus'
-import { fetchFromAmadeus } from './helpers'
+import type {
+  AmadeusAPIResponse,
+  FlightDestinationPrice,
+  FlightInspiration,
+  ServerActionResponse,
+} from '@/types/amadeus'
+import { AMADEUS_ENDPOINTS, fetchFromAmadeus } from './helpers'
 
 interface GetFlightInspirationProps {
-  originCity: string
+  city: string
+  airport: string
   token: string
 }
 
 export const getFlightInspiration = async ({
-  originCity,
+  city,
+  airport,
   token,
 }: GetFlightInspirationProps): Promise<
   ServerActionResponse<FlightDestinationPrice[]>
 > => {
   console.log(
-    `[Amadeus API] Fetching flight inspiration search results from origin: ${originCity}`,
+    `[Amadeus API] Fetching flight inspiration search results from origin: ${city}`,
   )
 
   const { success, data, message } = await fetchFromAmadeus(
-    `/shopping/flight-destinations?origin=${originCity}`,
+    `/shopping/flight-destinations?origin=${city}`,
     token,
     {},
-    'flightInspiration',
+    AMADEUS_ENDPOINTS.FLIGHT_INSPIRATION,
   )
 
   if (!success) {
@@ -31,6 +37,19 @@ export const getFlightInspiration = async ({
 
   const flightData: AmadeusAPIResponse<FlightInspiration> = data
 
+  if (airport) {
+    flightData.data = flightData.data.filter(({ origin }) => origin === airport)
+    if (flightData.data.length === 0) {
+      console.error(
+        `[Amadeus API] Error fetching flight inspiration for airport: ${airport}`,
+      )
+      return {
+        success: false,
+        message: `No flight inspiration found for airport: ${airport}`,
+      }
+    }
+  }
+
   const flightDataWithSelectedFields = flightData.data.map(
     ({ destination, price: { total } }) => ({
       iataCode: destination,
@@ -38,8 +57,8 @@ export const getFlightInspiration = async ({
     }),
   )
 
-  const flightDataWithOriginAndSelectedFields = [
-    { iataCode: originCity, total: 0 },
+  const flightDataIncludingDepartureLocation = [
+    { iataCode: airport ?? city, total: 0 },
     ...flightDataWithSelectedFields,
   ]
 
@@ -47,6 +66,6 @@ export const getFlightInspiration = async ({
 
   return {
     success: true,
-    data: flightDataWithOriginAndSelectedFields,
+    data: flightDataIncludingDepartureLocation,
   }
 }

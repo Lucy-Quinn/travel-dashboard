@@ -1,5 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import { graphic } from 'echarts'
+
 export const barChartSchema: EChartsOption = {
   title: {
     text: '',

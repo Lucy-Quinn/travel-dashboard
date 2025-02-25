@@ -1,5 +1,5 @@
-import { TravelBarChart } from '../TravelBarChart'
-import { TravelMapChart } from '../TravelMapChart'
+import { TravelBarChart } from '@/components/TravelBarChart'
+import { TravelMapChart } from '@/components/TravelMapChart'
 import { Header } from './Header'
 
 export const DashBoardContent = () => {

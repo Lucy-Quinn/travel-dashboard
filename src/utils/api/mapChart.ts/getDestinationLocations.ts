@@ -1,9 +1,8 @@
-import { FlightLocation } from '@/types/amadeus'
-
-import {
+import type {
   AmadeusAPIResponse,
   FlightDestinationPrice,
   FlightDestinationWithPrice,
+  FlightLocation,
   ServerActionResponse,
 } from '@/types/amadeus'
 import { AMADEUS_ENDPOINTS, fetchFromAmadeus, getServerActionMessages } from './helpers'
