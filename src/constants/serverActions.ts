@@ -9,8 +9,9 @@ export const MESSAGES = {
   INTERNAL_ERROR: 'An error occurred',
 
   // Token
-  FETCH_TOKEN_FAILED: 'Failed to fetch API token. Please try again.',
-  FETCH_TOKEN_SUCCESS: 'API token fetched successfully',
+  FETCH_TOKEN_REQUEST_FAILED: 'Failed to fetch API token. Please try again.',
+  FETCH_TOKEN_DATA_INVALID:
+    'Invalid data received from Amadeus API token. Please try again.',
 
   // Recommended Destinations
   FETCH_RECOMMENDED_DESTINATIONS_REQUEST_FAILED:
@@ -28,14 +29,15 @@ export const MESSAGES = {
   FETCH_FLIGHT_INSPIRATION_DATA_INVALID:
     'Invalid data received from Amadeus API flight inspiration. Please try again.',
 
-  // Flight Location Details
-  FETCH_FLIGHT_LOCATION_DETAILS_REQUEST_FAILED:
-    'Failed to request Amadeus API flight location details. Please try again.',
-  FETCH_FLIGHT_LOCATION_DETAILS_DATA_INVALID:
-    'Invalid data received from Amadeus API flight location details. Please try again.',
+  // Origin Location
+  FETCH_ORIGIN_LOCATION_REQUEST_FAILED: 'Failed to fetch origin location',
+  FETCH_ORIGIN_LOCATION_DATA_INVALID: 'Invalid origin location data received',
 
-  //   FETCH_FLIGHT_INSPIRATION_SUCCESS: 'Amadeus API flight inspiration fetched successfully',
+  // Destination Locations
+  FETCH_DESTINATION_LOCATIONS_REQUEST_FAILED: 'Failed to fetch destination locations',
+  FETCH_DESTINATION_LOCATIONS_DATA_INVALID: 'Invalid destination locations data received',
 
+  // Flight Details
   FETCH_FLIGHT_DETAILS_FAILED:
     'Failed to fetch Amadeus API flight details. Please try again.',
 } as const

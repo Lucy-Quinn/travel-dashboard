@@ -20,6 +20,7 @@ export const barChartSchema: EChartsOption = {
     },
     axisLabel: {
       fontSize: 16,
+      rotate: 45,
     },
   },
   yAxis: {
@@ -81,8 +82,38 @@ export const barChartSchema: EChartsOption = {
             fontSize: 12,
           },
           axisLabel: {
-            interval: 0,
             rotate: 45,
+            fontSize: 12,
+          },
+        },
+        yAxis: {
+          type: 'value',
+          nameTextStyle: {
+            fontSize: 12,
+          },
+          axisLabel: {
+            fontSize: 12,
+          },
+        },
+      },
+    },
+    {
+      query: {
+        minWidth: 426,
+        maxWidth: 767,
+      },
+      option: {
+        grid: {
+          left: '5%',
+          right: '10%',
+        },
+        xAxis: {
+          type: 'category',
+          name: 'City',
+          nameTextStyle: {
+            fontSize: 12,
+          },
+          axisLabel: {
             fontSize: 12,
           },
         },

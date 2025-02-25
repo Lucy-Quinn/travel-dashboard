@@ -1,7 +1,7 @@
 export type ServerActionResponse<T> = {
   success: boolean
   message?: string
-  data?: T[]
+  data?: T
 }
 
 export type AmadeusAPIResponse<T> = {
@@ -9,11 +9,7 @@ export type AmadeusAPIResponse<T> = {
   error_description?: string
 }
 
-export type AmadeusAuthResponse = {
-  state?: boolean
-  access_token?: string
-  error_description?: string
-}
+export type AmadeusAuthResponse = string
 
 export type DestinationRecommendation = {
   subtype: string
@@ -36,6 +32,11 @@ export type FlightInspiration = {
   price: {
     total: number
   }
+}
+
+export type FlightDestinationPrice = {
+  iataCode: string
+  total: number
 }
 
 export type FlightLocation = {

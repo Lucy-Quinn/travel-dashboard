@@ -2,13 +2,14 @@
 
 import { MESSAGES } from '@/constants/serverActions'
 import type { FlightDestinationWithPrice, ServerActionResponse } from '@/types/amadeus'
-import { getFlightInspirationWithLocations } from '@/utils/api/amadeus'
+import { getFlightInspirationWithLocations } from '@/utils/api/mapChart.ts/amadeus'
 
-export async function fetchFlightInspiration(): Promise<
-  ServerActionResponse<FlightDestinationWithPrice>
-> {
+export async function fetchFlightInspiration(
+  city: string,
+): Promise<ServerActionResponse<FlightDestinationWithPrice>> {
   try {
-    return await getFlightInspirationWithLocations('MAD')
+    console.log('[Server Action] Fetching flight inspiration for', city)
+    return await getFlightInspirationWithLocations(city)
   } catch (error) {
     console.error('[API] Error:', error)
     return {

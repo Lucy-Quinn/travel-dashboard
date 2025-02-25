@@ -13,15 +13,19 @@ export const useAmadeusFlightMap = () => {
   const fetchAndUpdateFlightMap = async (city: string): Promise<void> => {
     try {
       setIsLoading(true)
-      const flightInspirationResponse = await fetchFlightInspiration()
+      const flightInspirationResponse = await fetchFlightInspiration(city)
 
       if (!flightInspirationResponse.success) {
-        setMessage({ error: 'An error occurred' })
+        setMessage({
+          error: `Failed to fetch flight prices for ${city}. Please try again in a few moments.`,
+        })
         return
       }
 
       if (!flightInspirationResponse.data) {
-        setMessage({ error: 'No data received' })
+        setMessage({
+          error: `No flight deals found for ${city}. Try searching for a different city.`,
+        })
         return
       }
 
@@ -33,6 +37,7 @@ export const useAmadeusFlightMap = () => {
       }
 
       const formattedOptions = formatFlightMap({ flightData, cityOrigin: city })
+
       setOptions(formattedOptions)
       setMessage({ success: message })
       setIsLoading(false)

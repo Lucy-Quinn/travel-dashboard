@@ -3,7 +3,7 @@ import type { EChartsOption } from 'echarts'
 
 export const mapChartSchema: EChartsOption = {
   title: {
-    text: 'Flight Destinations',
+    text: 'Flight Destinations with prices',
     left: 'center',
     textStyle: {
       fontSize: 18,
@@ -32,7 +32,9 @@ export const mapChartSchema: EChartsOption = {
       borderColor: '#ffffff',
       borderWidth: 1,
       areaColor: '#b3cde0',
-      emphasis: {
+    },
+    emphasis: {
+      itemStyle: {
         areaColor: '#005b96',
       },
     },
@@ -53,9 +55,9 @@ export const mapChartSchema: EChartsOption = {
       type: 'scatter', // City points/markers (shows prices)
       coordinateSystem: 'geo',
       symbolSize: 8,
-      itemStyle: {
-        color: '#ff4d4f',
-      },
+      // itemStyle: {
+      //   color: '#ff4d4f',
+      // },
       label: {
         show: true,
         position: 'right',

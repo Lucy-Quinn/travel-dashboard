@@ -6,7 +6,7 @@ import type {
   DestinationRecommendation,
   ServerActionResponse,
 } from '@/types/amadeus'
-import { getAmadeusToken } from '@/utils/api/amadeus'
+import { getAmadeusToken } from '@/utils/api/mapChart.ts/getAmadeusToken'
 
 export async function fetchRecommendedDestinations(
   cityCode: string,
@@ -14,11 +14,19 @@ export async function fetchRecommendedDestinations(
   try {
     const { apiUrl } = AMADEUS_CONFIG
 
-    const { success, token, message } = await getAmadeusToken()
+    const {
+      success: tokenSuccess,
+      data: token,
+      message: tokenMessage,
+    } = await getAmadeusToken()
+    if (!tokenSuccess || !token) {
+      console.error('[Amadeus API] Error fetching token:', tokenMessage)
+      return { success: tokenSuccess, message: tokenMessage }
+    }
 
-    if (!success) {
-      console.error('[API] Error fetching Amadeus token:', message)
-      return { success, message }
+    if (!tokenSuccess || !token) {
+      console.error('[API] Error fetching Amadeus token:', tokenMessage)
+      return { success: tokenSuccess, message: tokenMessage }
     }
 
     try {

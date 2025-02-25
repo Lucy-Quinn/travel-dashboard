@@ -7,7 +7,7 @@ import { GeoComponent, TooltipComponent, VisualMapComponent } from 'echarts/comp
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { useEffect, useState } from 'react'
-
+import { Form } from '../TravelBarChart/Form'
 echarts.use([
   MapChart,
   GeoComponent,
@@ -18,6 +18,7 @@ echarts.use([
 export const TravelMapChart = () => {
   const [mapReady, setMapReady] = useState<boolean>(false)
   const { options, fetchAndUpdateFlightMap, message, isLoading } = useAmadeusFlightMap()
+  const [showChart, setShowChart] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchMap = async () => {
@@ -34,26 +35,39 @@ export const TravelMapChart = () => {
     fetchMap()
   }, [])
 
-  const loadChartData = async (): Promise<void> => {
-    const flightData = await fetchAndUpdateFlightMap('MAD')
-    // console.log('🚀 ~ loadChartData ~ flightData:', flightData)
-    // setShowChart(true)
-    // console.log('loadChartData')
+  const loadChartData = async (city: string): Promise<void> => {
+    try {
+      await fetchAndUpdateFlightMap(city)
+      setShowChart(true)
+    } catch (error) {
+      console.error('Error in loadChartData:', error)
+    }
   }
 
   return (
     <div>
-      {/* <Form onSubmit={loadChartData} message={message} /> */}
+      <Form onSubmit={loadChartData} message={message} />
 
       <button
-        onClick={() => loadChartData()}
+        onClick={() => loadChartData('BCN')}
         className="rounded bg-blue-500 p-2 text-white"
       >
         Load Flight Data from BCN
       </button>
+
       {mapReady && (
         <ReactECharts option={options} style={{ height: '500px', width: '100%' }} />
       )}
+      {/* {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        mapReady &&
+        showChart && (
+          <ReactECharts option={options} style={{ height: '500px', width: '100%' }} />
+        )
+      )}
+
+      {!isLoading && !mapReady && <EmptyState />} */}
     </div>
   )
 }

@@ -1,1 +1,1 @@
-export * from './amadeus'
+export * from './mapChart.ts/amadeus'

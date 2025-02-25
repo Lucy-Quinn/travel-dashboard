@@ -16,12 +16,16 @@ export const useAmadeusBarChart = () => {
       const travelResponse = await fetchRecommendedDestinations(city)
 
       if (!travelResponse.success) {
-        setMessage({ error: 'An error occurred' })
+        setMessage({
+          error: `Failed to fetch recommended destinations for ${city}. Please try again in a few moments.`,
+        })
         return
       }
 
       if (!travelResponse.data) {
-        setMessage({ error: 'No data received' })
+        setMessage({
+          error: `No recommended destinations found for ${city}. Try searching for a different city.`,
+        })
         return
       }
 

@@ -1,5 +1,5 @@
 export const CITY_OPTIONS = {
-  BCN: 'Barcelona',
+  MIA: 'Miami',
   MAD: 'Madrid',
   LON: 'London',
   NYC: 'New York City',
