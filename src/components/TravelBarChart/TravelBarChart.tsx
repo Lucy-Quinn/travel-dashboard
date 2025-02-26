@@ -8,7 +8,7 @@ import { CITY_OPTIONS, CITY_OPTIONS_PLACEHOLDER } from '@/constants/travelChart'
 import { useAmadeusBarChart } from '@/hooks/useAmadeusBarChart'
 import ReactECharts from 'echarts-for-react'
 import { useState } from 'react'
-import { FieldValues } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
 
 export const TravelBarChart = () => {
   const { options, fetchAndUpdateBarChart, message, isLoading } = useAmadeusBarChart()
@@ -32,23 +32,30 @@ export const TravelBarChart = () => {
             city: CITY_OPTIONS_PLACEHOLDER,
           }}
         >
-          {({ control }) => (
-            <>
-              <ControlledSelect
-                control={control}
-                options={CITY_OPTIONS}
-                placeholder={CITY_OPTIONS_PLACEHOLDER}
-                name="city"
-              />
+          {({ control, handleSubmit, processForm }) => (
+            <div>
+              <div className="sm:w-4/12 md:m-auto md:w-1/2 lg:m-0 lg:ml-auto xl:text-lg">
+                <ControlledSelect
+                  handleSubmit={handleSubmit}
+                  processForm={processForm}
+                  control={control}
+                  options={CITY_OPTIONS}
+                  placeholder={CITY_OPTIONS_PLACEHOLDER}
+                  name="city"
+                />
+              </div>
               <FeedbackMessage message={message} />
-            </>
+            </div>
           )}
         </FormWrapper>
-        <div className="relative mt-6 min-h-[500px] w-full">
+        <div className="relative flex min-h-[500px] w-full items-center justify-center">
           {isLoading ? (
             <LoadingSpinner />
           ) : showChart ? (
-            <ReactECharts option={options} style={{ height: '500px', width: '100%' }} />
+            <ReactECharts
+              option={options}
+              style={{ height: '500px', width: '100%', marginTop: '20px' }}
+            />
           ) : (
             <EmptyState />
           )}

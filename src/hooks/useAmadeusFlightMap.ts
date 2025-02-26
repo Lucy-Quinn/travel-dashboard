@@ -4,7 +4,7 @@ import type { MessageState } from '@/types/travelChart'
 import { formatFlightMap } from '@/utils/formatters/charts/mapChartFormatter'
 import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
-import { FieldValues } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
 
 export const useAmadeusFlightMap = () => {
   const [options, setOptions] = useState<EChartsOption>(mapChartSchema)

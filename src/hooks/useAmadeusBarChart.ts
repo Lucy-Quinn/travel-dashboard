@@ -4,7 +4,7 @@ import type { MessageState } from '@/types/travelChart'
 import { formatDestinationBarChart } from '@/utils/formatters/charts/barChartFormatter'
 import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
-import { FieldValues } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
 
 export const useAmadeusBarChart = () => {
   const [options, setOptions] = useState<EChartsOption>(barChartSchema)

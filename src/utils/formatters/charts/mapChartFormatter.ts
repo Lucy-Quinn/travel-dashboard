@@ -1,5 +1,6 @@
 import { mapChartSchema } from '@/schemas/charts'
 import type { FlightDestinationWithPrice } from '@/types/amadeus'
+import { toCamelCase } from '@/utils/formatters/nameFormatters'
 import cloneDeep from 'lodash/cloneDeep'
 
 interface FormatFlightMapProps {
@@ -28,11 +29,13 @@ export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps
     if (iataCode === cityOrigin) {
       // Origin city
       // @ts-expect-error - This is a valid series index
+      acc.title.text = `Flight Destinations with prices from ${toCamelCase(cityName)}`
+      // @ts-expect-error - This is a valid series index
       acc.series?.[0].data.push({
         name: `${airportName} (${cityName})`,
-        value: [...coordinates, 0],
+        value: [...coordinates],
         itemStyle: {
-          color: '#ff4d4f',
+          color: '#1E3A8A',
         },
         symbolSize: 10,
       })

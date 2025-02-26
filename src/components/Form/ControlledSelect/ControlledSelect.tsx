@@ -1,5 +1,11 @@
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
-import { Control, Controller, FieldValues, Path } from 'react-hook-form'
+import {
+  Control,
+  Controller,
+  type FieldValues,
+  Path,
+  UseFormHandleSubmit,
+} from 'react-hook-form'
 
 interface ControlledSelectProps<T extends FieldValues> {
   control: Control<T>
@@ -7,6 +13,8 @@ interface ControlledSelectProps<T extends FieldValues> {
   placeholder: string
   name: string
   handleChange?: (value: string) => void
+  handleSubmit?: UseFormHandleSubmit<FieldValues>
+  processForm?: (data: FieldValues) => void
 }
 
 export const ControlledSelect = <T extends FieldValues>({
@@ -15,6 +23,8 @@ export const ControlledSelect = <T extends FieldValues>({
   placeholder,
   name,
   handleChange,
+  handleSubmit,
+  processForm,
 }: ControlledSelectProps<T>) => {
   return (
     <Controller
@@ -25,13 +35,18 @@ export const ControlledSelect = <T extends FieldValues>({
           value={field.value || ''}
           onChange={(value) => {
             field.onChange(value)
+            // Allow for custom handling of the select value - this is used for the map chart
             if (handleChange) {
               handleChange(value)
             }
+            // Allow for form submission when the select is changed - this is used for the bar chart
+            if (handleSubmit && processForm) {
+              handleSubmit(processForm)()
+            }
           }}
         >
-          <div className="relative z-10 m-2">
-            <ListboxButton className="flex w-full justify-center rounded-lg bg-black p-2 text-sm font-bold text-white shadow-sm hover:bg-black/80 focus:outline-none sm:w-4/12 md:m-auto lg:m-0 lg:ml-auto xl:text-lg">
+          <div className="relative z-10 text-sm">
+            <ListboxButton className="button dropdown-button flex w-full justify-center">
               {options[field.value as keyof typeof options] || placeholder}
             </ListboxButton>
             <ListboxOptions className="absolute mt-1 w-full rounded-md border bg-white shadow-lg">

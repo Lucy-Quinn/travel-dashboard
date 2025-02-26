@@ -14,7 +14,7 @@ import { useAmadeusFlightMap } from '@/hooks/useAmadeusFlightMap'
 import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { useEffect, useState } from 'react'
-import { FieldValues } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
 import { generateAirportOptions } from './generateAirportOptions'
 
 export const TravelMapChart = () => {
@@ -50,7 +50,7 @@ export const TravelMapChart = () => {
   }
 
   return (
-    <div>
+    <div className="mx-auto h-full">
       <FormWrapper
         onSubmit={loadChartData}
         defaultValues={{
@@ -61,25 +61,31 @@ export const TravelMapChart = () => {
         }}
       >
         {({ control }) => (
-          <>
-            <ControlledSelect
-              control={control}
-              options={CITY_OPTIONS}
-              placeholder={CITY_OPTIONS_PLACEHOLDER}
-              name="city"
-              handleChange={handleCityChange}
-            />
-            {selectedCity &&
-              CITY_AIRPORT_MAP[selectedCity as keyof typeof CITY_AIRPORT_MAP] && (
-                <ControlledSelect
-                  control={control}
-                  options={generateAirportOptions(selectedCity)}
-                  placeholder={AIRPORT_OPTIONS_PLACEHOLDER}
-                  name="airport"
-                />
-              )}
+          <div>
+            <div className="mr-3 mt-2 flex justify-end gap-2">
+              <ControlledSelect
+                control={control}
+                options={CITY_OPTIONS}
+                placeholder={CITY_OPTIONS_PLACEHOLDER}
+                name="city"
+                handleChange={handleCityChange}
+              />
+              {selectedCity &&
+                CITY_AIRPORT_MAP[selectedCity as keyof typeof CITY_AIRPORT_MAP] && (
+                  <ControlledSelect
+                    control={control}
+                    options={generateAirportOptions(selectedCity)}
+                    placeholder={AIRPORT_OPTIONS_PLACEHOLDER}
+                    name="airport"
+                  />
+                )}
+
+              <button type="submit" className="button submit-button">
+                Submit
+              </button>
+            </div>
             <FeedbackMessage message={message} />
-          </>
+          </div>
         )}
       </FormWrapper>
 
@@ -87,7 +93,10 @@ export const TravelMapChart = () => {
         <LoadingSpinner />
       ) : (
         mapReady && (
-          <ReactECharts option={options} style={{ height: '500px', width: '100%' }} />
+          <ReactECharts
+            option={options}
+            style={{ height: '500px', width: '100%', marginTop: '20px' }}
+          />
         )
       )}
     </div>

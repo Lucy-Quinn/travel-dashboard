@@ -7,7 +7,9 @@ export const barChartSchema: EChartsOption = {
     left: 'center',
     textStyle: {
       lineHeight: 30,
-      fontSize: 18,
+      fontSize: 22,
+      fontWeight: 'bolder',
+      color: '#1E3A8A',
     },
   },
   tooltip: {},
@@ -18,10 +20,12 @@ export const barChartSchema: EChartsOption = {
     nameTextStyle: {
       fontSize: 16,
       lineHeight: 30,
+      color: '#1E3A8A',
     },
     axisLabel: {
       fontSize: 16,
       rotate: 45,
+      color: '#1E3A8A',
     },
   },
   yAxis: {
@@ -30,10 +34,12 @@ export const barChartSchema: EChartsOption = {
     nameTextStyle: {
       fontSize: 16,
       lineHeight: 30,
+      color: '#1E3A8A',
     },
     axisLabel: {
       formatter: '{value}%',
       fontSize: 16,
+      color: '#1E3A8A',
     },
   },
   grid: {
@@ -51,7 +57,7 @@ export const barChartSchema: EChartsOption = {
       itemStyle: {
         color: new graphic.LinearGradient(0, 0, 0, 1, [
           { offset: 0, color: '#4F46E5' },
-          { offset: 1, color: '#A5B4FC' },
+          { offset: 1, color: '#1E3A8A' },
         ]),
         borderRadius: [5, 5, 0, 0],
       },

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gray-100 text-gray-900;
+  @apply text-primary-blue bg-gray-100;
 }
 
 * {
@@ -21,4 +21,16 @@ body {
 
 .chart-container {
   @apply flex items-center justify-center rounded-lg bg-white p-4 shadow;
+}
+
+.button {
+  @apply min-h-[40px] min-w-[110px] items-center justify-center rounded-lg p-2 text-sm font-bold shadow-sm transition-all duration-200 ease-in-out focus:outline-none;
+}
+
+.dropdown-button {
+  @apply bg-primary-blue hover:border-primary-blue text-white hover:border hover:bg-[#4c8cb5];
+}
+
+.submit-button {
+  @apply border-primary-blue text-primary-blue items-center border bg-white hover:bg-[#4c8cb5] hover:text-white;
 }

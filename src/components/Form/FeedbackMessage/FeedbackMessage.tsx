@@ -7,7 +7,12 @@ interface FeedbackMessageProps {
 export const FeedbackMessage = ({ message }: FeedbackMessageProps) => {
   return (
     message && (
-      <p className={clsx(message.success ? 'text-green-600' : 'text-red-500')}>
+      <p
+        className={clsx(
+          'mt-2 text-right',
+          message.success ? 'text-green-600' : 'text-red-500',
+        )}
+      >
         {message.success || message.error}
       </p>
     )
