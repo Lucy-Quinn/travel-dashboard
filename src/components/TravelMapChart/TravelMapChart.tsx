@@ -62,7 +62,7 @@ export const TravelMapChart = () => {
       >
         {({ control }) => (
           <div>
-            <div className="mr-3 mt-2 flex justify-end gap-2">
+            <div className="mx-2 mt-2 flex flex-col justify-end gap-2 md:mr-3 md:flex-row">
               <ControlledSelect
                 control={control}
                 options={CITY_OPTIONS}
@@ -80,8 +80,8 @@ export const TravelMapChart = () => {
                   />
                 )}
 
-              <button type="submit" className="button submit-button">
-                Submit
+              <button type="submit" className="button submit-button" disabled={isLoading}>
+                {isLoading ? 'loading...' : 'Submit'}
               </button>
             </div>
             <FeedbackMessage message={message} />
@@ -89,16 +89,19 @@ export const TravelMapChart = () => {
         )}
       </FormWrapper>
 
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        mapReady && (
-          <ReactECharts
-            option={options}
-            style={{ height: '500px', width: '100%', marginTop: '20px' }}
-          />
-        )
-      )}
+      <div className="flex min-h-[300px] w-full items-center justify-center md:min-h-[400px] lg:min-h-[500px]">
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          mapReady && (
+            <ReactECharts
+              option={options}
+              className="min-h-[300px] w-full md:min-h-[500px]"
+              style={{ height: '100%', width: '100%', marginTop: '20px' }}
+            />
+          )
+        )}
+      </div>
     </div>
   )
 }

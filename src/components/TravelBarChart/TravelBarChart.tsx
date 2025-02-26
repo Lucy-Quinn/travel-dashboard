@@ -48,13 +48,14 @@ export const TravelBarChart = () => {
             </div>
           )}
         </FormWrapper>
-        <div className="relative flex min-h-[500px] w-full items-center justify-center">
+        <div className="relative flex min-h-[300px] w-full items-center justify-center max-sm:mt-5 md:min-h-[400px] md:items-center lg:min-h-[500px]">
           {isLoading ? (
             <LoadingSpinner />
-          ) : showChart ? (
+          ) : showChart && !message?.error ? (
             <ReactECharts
               option={options}
-              style={{ height: '500px', width: '100%', marginTop: '20px' }}
+              className="min-h-[450px] w-full md:min-h-[500px]"
+              style={{ height: '100%', width: '100%', marginTop: '20px' }}
             />
           ) : (
             <EmptyState />

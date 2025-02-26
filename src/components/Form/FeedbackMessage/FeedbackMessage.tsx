@@ -9,7 +9,7 @@ export const FeedbackMessage = ({ message }: FeedbackMessageProps) => {
     message && (
       <p
         className={clsx(
-          'mt-2 text-right',
+          'mt-2 text-center md:text-right',
           message.success ? 'text-green-600' : 'text-red-500',
         )}
       >

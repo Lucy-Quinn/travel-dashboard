@@ -2,10 +2,10 @@ import { CITY_OPTIONS } from '@/constants/travelChart'
 import { barChartSchema } from '@/schemas/charts'
 import type { DestinationRecommendation } from '@/types/amadeus'
 
-const generateTitleText = (cityOrigin: string, isMobile: boolean = false) => {
+const generateBarChartTitleText = (cityOrigin: string, isMobile: boolean = false) => {
   const cityName = CITY_OPTIONS[cityOrigin as keyof typeof CITY_OPTIONS]
-  const baseText = 'Recommended Destinations From'
-  return isMobile ? `${baseText}\n${cityName}` : `${baseText} ${cityName}`
+  const baseText = 'Recommended destinations'
+  return isMobile ? `${baseText}\nfrom ${cityName}` : `${baseText} from ${cityName}`
 }
 
 interface FormatDestinationBarChartProps {
@@ -24,8 +24,8 @@ export const formatDestinationBarChart = ({
     acc.xAxis.data.push(name)
     acc.series[0].data.push(Math.round(relevance * 100))
     if (index === travelData.length - 1) {
-      acc.title.text = generateTitleText(cityOrigin)
-      acc.media[0].option.title.text = generateTitleText(cityOrigin, true)
+      acc.title.text = generateBarChartTitleText(cityOrigin)
+      acc.media[0].option.title.text = generateBarChartTitleText(cityOrigin, true)
     }
     return acc
   }, barChartSchemaOptions)

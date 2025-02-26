@@ -1,4 +1,4 @@
-import { formatLocationName } from '@/utils/formatters'
+import { formatFlightPriceLabel, formatLocationName } from '@/utils/formatters'
 import type { EChartsOption } from 'echarts'
 interface Params {
   value?: [number, number, number]
@@ -10,8 +10,6 @@ export const mapChartSchema: EChartsOption = {
   title: {
     text: 'Flight Destinations with prices',
     left: 'center',
-    top: 20,
-    bottom: 20,
     textStyle: {
       fontSize: 22,
       fontWeight: 'bolder',
@@ -29,14 +27,7 @@ export const mapChartSchema: EChartsOption = {
     formatter: function (params) {
       const { value, name, componentSubType } = params as Params
       if (componentSubType === 'scatter') {
-        const { airportName, cityName } = formatLocationName(String(name))
-
-        if (value && !value[2]) {
-          return `${airportName} (${cityName})`
-        }
-        const price = value && value[2] ? value[2] : '0'
-
-        return `${airportName} (${cityName}): €${price}`
+        return formatFlightPriceLabel({ value, name })
       }
       if (componentSubType === 'lines') {
         return ''
@@ -104,6 +95,23 @@ export const mapChartSchema: EChartsOption = {
         curveness: 0.2,
       },
       data: [],
+    },
+  ],
+  media: [
+    {
+      query: {
+        maxWidth: 426,
+      },
+      option: {
+        title: {
+          top: 20,
+          bottom: 20,
+          text: 'Flight Destinations with prices',
+          textStyle: {
+            fontSize: 18,
+          },
+        },
+      },
     },
   ],
 }

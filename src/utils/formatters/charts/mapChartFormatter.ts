@@ -1,6 +1,6 @@
 import { mapChartSchema } from '@/schemas/charts'
 import type { FlightDestinationWithPrice } from '@/types/amadeus'
-import { toCamelCase } from '@/utils/formatters/nameFormatters'
+import { formatLocationName, toCamelCase } from '@/utils/formatters/nameFormatters'
 import cloneDeep from 'lodash/cloneDeep'
 
 interface FormatFlightMapProps {
@@ -26,10 +26,18 @@ export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps
 
     const coordinates = [longitude, latitude]
 
+    const generateMapChartTitleText = (isMobile: boolean = false) => {
+      const city = toCamelCase(cityName)
+      const baseText = 'Flight Destinations with prices '
+      return isMobile ? `${baseText}\nfrom ${city}` : `${baseText} from ${city}`
+    }
+
     if (iataCode === cityOrigin) {
       // Origin city
       // @ts-expect-error - This is a valid series index
-      acc.title.text = `Flight Destinations with prices from ${toCamelCase(cityName)}`
+      acc.title.text = generateMapChartTitleText()
+      // @ts-expect-error - This is a valid series index
+      acc.media[0].option.title.text = generateMapChartTitleText(true)
       // @ts-expect-error - This is a valid series index
       acc.series?.[0].data.push({
         name: `${airportName} (${cityName})`,
@@ -59,4 +67,20 @@ export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps
   }, mapSchemaOptions)
 
   return formattedData
+}
+
+interface FormatFlightPriceLabelProps {
+  value?: [number, number, number]
+  name: string
+}
+
+export const formatFlightPriceLabel = ({ value, name }: FormatFlightPriceLabelProps) => {
+  const { airportName, cityName } = formatLocationName(String(name))
+
+  if (value && !value[2]) {
+    return `${airportName} (${cityName})`
+  }
+  const price = value && value[2] ? value[2] : '0'
+
+  return `${airportName} (${cityName}): €${price}`
 }

@@ -80,6 +80,8 @@ export const barChartSchema: EChartsOption = {
         },
         grid: {
           top: 120,
+          left: '4%',
+          right: '12%',
         },
         xAxis: {
           type: 'category',

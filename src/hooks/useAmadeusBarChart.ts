@@ -49,6 +49,8 @@ export const useAmadeusBarChart = () => {
       console.error('Error:', error)
       setMessage({ error: 'An error occurred' })
       setIsLoading(false)
+    } finally {
+      setIsLoading(false)
     }
   }
 
