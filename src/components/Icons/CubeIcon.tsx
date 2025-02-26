@@ -1,6 +1,6 @@
 export const CubeIcon = () => (
   <svg
-    className="mb-4 h-12 w-12 text-gray-300"
+    className="mb-4 h-12 w-12 text-[#1E3A8A]"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"

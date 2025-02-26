@@ -38,7 +38,9 @@
     "**/*.ts",
     "**/*.tsx",
     "tailwind.config.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/utils/api/geoChart",
+    "src/utils/api/barChart"
   ],
   "exclude": ["node_modules"]
 }

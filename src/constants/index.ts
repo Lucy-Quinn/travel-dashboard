@@ -1,2 +1,2 @@
 export * from './serverActions'
-export * from './TravelBarChart'
+export * from './travelChart'

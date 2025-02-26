@@ -1,21 +1,17 @@
-export type AmadeusAPIResponse = {
+export type ServerActionResponse<T> = {
   success: boolean
   message?: string
-  data?: { data: AmadeusDestinationRecommendation[] }
+  data?: T
 }
 
-export type AmadeusAuthResponse = {
-  state?: boolean
-  access_token?: string
+export type AmadeusAPIResponse<T> = {
+  data: T[]
   error_description?: string
 }
 
-export type AmadeusDestinationResponse = {
-  data: AmadeusDestinationRecommendation[]
-  error_description?: string
-}
+export type AmadeusAuthResponse = string
 
-export type AmadeusDestinationRecommendation = {
+export type DestinationRecommendation = {
   subtype: string
   name: string
   iataCode: string
@@ -25,4 +21,51 @@ export type AmadeusDestinationRecommendation = {
   }
   type: string
   relevance: number
+}
+
+export type FlightInspiration = {
+  type: string
+  origin: string
+  destination: string
+  departureDate: string
+  returnDate: string
+  price: {
+    total: number
+  }
+}
+
+export type FlightDestinationPrice = {
+  iataCode: string
+  total: number
+}
+
+export type FlightLocation = {
+  type: string
+  subType: string
+  name: string
+  detailedName: string
+  id: string
+  iataCode: string
+  geoCode: {
+    latitude: number
+    longitude: number
+  }
+  address: {
+    cityName: string
+    cityCode: string
+    countryName: string
+    countryCode: string
+    regionCode: string
+  }
+}
+
+export type FlightDestinationWithPrice = {
+  airportName: string
+  iataCode: string
+  cityName: string
+  total: number
+  geoCode: {
+    latitude: number
+    longitude: number
+  }
 }

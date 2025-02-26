@@ -1,1 +1,2 @@
-export * from './charts/travelBarChart'
+export * from './charts/barChartSchema'
+export * from './charts/geoChartSchema'
