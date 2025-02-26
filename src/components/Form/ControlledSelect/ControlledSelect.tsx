@@ -1,10 +1,10 @@
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import {
-  Control,
+  type Control,
   Controller,
   type FieldValues,
-  Path,
-  UseFormHandleSubmit,
+  type Path,
+  type UseFormHandleSubmit,
 } from 'react-hook-form'
 
 interface ControlledSelectProps<T extends FieldValues> {

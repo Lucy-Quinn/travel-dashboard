@@ -28,7 +28,7 @@ export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps
 
     const generateMapChartTitleText = (isMobile: boolean = false) => {
       const city = toCamelCase(cityName)
-      const baseText = 'Flight Destinations with prices '
+      const baseText = 'Flight Destinations with prices'
       return isMobile ? `${baseText}\nfrom ${city}` : `${baseText} from ${city}`
     }
 
