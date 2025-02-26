@@ -13,17 +13,17 @@ import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { generateAirportOptions } from '../generateAirportOptions'
 
-interface MapChartFormProps {
+interface GeoChartFormProps {
   fetchAndUpdateFlightMap: (data: FieldValues) => Promise<void>
   message: MessageState
   isLoading: boolean
 }
 
-export const MapChartForm = ({
+export const GeoChartForm = ({
   fetchAndUpdateFlightMap,
   message,
   isLoading,
-}: MapChartFormProps) => {
+}: GeoChartFormProps) => {
   const [selectedCity, setSelectedCity] = useState<string>('')
 
   const loadChartData = async (data: FieldValues): Promise<void> => {

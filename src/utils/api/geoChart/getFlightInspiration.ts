@@ -4,7 +4,7 @@ import type {
   FlightInspiration,
   ServerActionResponse,
 } from '@/types/amadeus'
-import { AMADEUS_ENDPOINTS, fetchFromAmadeus } from './helpers'
+import { AMADEUS_ENDPOINTS, fetchFromAmadeus } from '../helpers'
 
 interface GetFlightInspirationProps {
   city: string

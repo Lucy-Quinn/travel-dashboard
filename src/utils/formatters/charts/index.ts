@@ -1,2 +1,2 @@
 export * from './barChartFormatter'
-export * from './mapChartFormatter'
+export * from './geoChartFormatter'

@@ -2,16 +2,16 @@ import { ChartRenderer } from '@/components/ChartRenderer'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { EChartsOption } from 'echarts-for-react'
 
-interface MapChartDisplayProps {
+interface GeoChartDisplayProps {
   options: EChartsOption
   isLoading: boolean
   mapReady: boolean
 }
-export const MapChartDisplay = ({
+export const GeoChartDisplay = ({
   options,
   isLoading,
   mapReady,
-}: MapChartDisplayProps) => {
+}: GeoChartDisplayProps) => {
   return (
     <div className="flex min-h-[300px] w-full items-center justify-center md:min-h-[400px] lg:min-h-[500px]">
       {isLoading ? (

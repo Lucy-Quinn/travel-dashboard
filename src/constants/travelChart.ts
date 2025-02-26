@@ -1,4 +1,4 @@
-// Travel Bar Chart & Map Chart
+// Travel Bar Chart & Geo Chart
 export const CITY_OPTIONS = {
   MIA: 'Miami',
   MAD: 'Madrid',
@@ -8,7 +8,7 @@ export const CITY_OPTIONS = {
 
 export const CITY_OPTIONS_PLACEHOLDER = 'Select a city'
 
-// Travel Map Chart
+// Travel Geo Chart
 export const CITY_AIRPORT_MAP = {
   LON: ['LHR', 'LGW'],
   NYC: ['JFK'],

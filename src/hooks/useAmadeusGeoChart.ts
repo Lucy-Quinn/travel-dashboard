@@ -1,13 +1,13 @@
 import { fetchFlightInspiration } from '@/actions/flight-inspiration'
-import { mapChartSchema } from '@/schemas/charts'
+import { geoChartSchema } from '@/schemas/charts'
 import type { MessageState } from '@/types/travelChart'
-import { formatFlightMap } from '@/utils/formatters/charts/mapChartFormatter'
+import { formatFlightMap } from '@/utils/formatters/charts/geoChartFormatter'
 import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
 import type { FieldValues } from 'react-hook-form'
 
-export const useAmadeusFlightMap = () => {
-  const [options, setOptions] = useState<EChartsOption>(mapChartSchema)
+export const useAmadeusGeoChart = () => {
+  const [options, setOptions] = useState<EChartsOption>(geoChartSchema)
   const [message, setMessage] = useState<MessageState>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 

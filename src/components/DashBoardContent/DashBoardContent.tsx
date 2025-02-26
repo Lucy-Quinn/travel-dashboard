@@ -1,5 +1,5 @@
 import { TravelBarChart } from '@/components/TravelBarChart'
-import { TravelMapChart } from '@/components/TravelMapChart'
+import { TravelGeoChart } from '@/components/TravelGeoChart'
 import { Header } from './Header'
 
 export const DashBoardContent = () => {
@@ -13,7 +13,7 @@ export const DashBoardContent = () => {
         </div>
 
         <div className="rounded-lg bg-white shadow-lg">
-          <TravelMapChart />
+          <TravelGeoChart />
         </div>
       </div>
     </div>

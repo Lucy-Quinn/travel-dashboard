@@ -1,15 +1,14 @@
-import { mapChartSchema } from '@/schemas/charts'
+import { geoChartSchema } from '@/schemas/charts'
 import type { FlightDestinationWithPrice } from '@/types/amadeus'
 import { formatLocationName, toCamelCase } from '@/utils/formatters/nameFormatters'
 import cloneDeep from 'lodash/cloneDeep'
-
 interface FormatFlightMapProps {
   flightData: FlightDestinationWithPrice[]
   cityOrigin: string
 }
 
 export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps) => {
-  const mapSchemaOptions = cloneDeep(mapChartSchema)
+  const mapSchemaOptions = cloneDeep(geoChartSchema)
 
   const { geoCode: { latitude, longitude } = { latitude: 0, longitude: 0 } } =
     flightData.find(({ iataCode }) => iataCode === cityOrigin) ?? {}
@@ -26,7 +25,7 @@ export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps
 
     const coordinates = [longitude, latitude]
 
-    const generateMapChartTitleText = (isMobile: boolean = false) => {
+    const generateGeoChartTitleText = (isMobile: boolean = false) => {
       const city = toCamelCase(cityName)
       const baseText = 'Flight Destinations with prices'
       return isMobile ? `${baseText}\nfrom ${city}` : `${baseText} from ${city}`
@@ -35,9 +34,9 @@ export const formatFlightMap = ({ flightData, cityOrigin }: FormatFlightMapProps
     if (iataCode === cityOrigin) {
       // Origin city
       // @ts-expect-error - This is a valid series index
-      acc.title.text = generateMapChartTitleText()
+      acc.title.text = generateGeoChartTitleText()
       // @ts-expect-error - This is a valid series index
-      acc.media[0].option.title.text = generateMapChartTitleText(true)
+      acc.media[0].option.title.text = generateGeoChartTitleText(true)
       // @ts-expect-error - This is a valid series index
       acc.series?.[0].data.push({
         name: `${airportName} (${cityName})`,

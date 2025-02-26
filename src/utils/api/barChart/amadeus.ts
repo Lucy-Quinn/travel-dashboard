@@ -1,7 +1,7 @@
 import { MESSAGES } from '@/constants/serverActions'
 import { AmadeusAPIResponse, DestinationRecommendation } from '@/types/amadeus'
-import { getAmadeusToken } from '@/utils/api/mapChart.ts/getAmadeusToken'
-import { AMADEUS_ENDPOINTS, fetchFromAmadeus } from '@/utils/api/mapChart.ts/helpers'
+import { getAmadeusToken } from '@/utils/api/geoChart/getAmadeusToken'
+import { AMADEUS_ENDPOINTS, fetchFromAmadeus } from '@/utils/api/helpers'
 
 export const getRecommendedDestinations = async (cityCode: string) => {
   const {

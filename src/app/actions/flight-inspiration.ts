@@ -2,7 +2,7 @@
 
 import { MESSAGES } from '@/constants/serverActions'
 import type { FlightDestinationWithPrice, ServerActionResponse } from '@/types/amadeus'
-import { getFlightInspirationWithLocations } from '@/utils/api/mapChart.ts/amadeus'
+import { getFlightInspirationWithLocations } from '@/utils/api/geoChart/amadeus'
 
 export async function fetchFlightInspiration(
   city: string,

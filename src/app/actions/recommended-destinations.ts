@@ -2,7 +2,7 @@
 
 import { MESSAGES } from '@/constants/serverActions'
 import type { DestinationRecommendation, ServerActionResponse } from '@/types/amadeus'
-import { getRecommendedDestinations } from '@/utils/api/barChart.ts/amadeus'
+import { getRecommendedDestinations } from '@/utils/api/barChart/amadeus'
 
 export async function fetchRecommendedDestinations(
   cityCode: string,

@@ -1,13 +1,13 @@
 'use client'
 
-import { useAmadeusFlightMap } from '@/hooks/useAmadeusFlightMap'
+import { useAmadeusGeoChart } from '@/hooks/useAmadeusGeoChart'
 import * as echarts from 'echarts/core'
 import { useEffect, useState } from 'react'
-import { MapChartDisplay } from './MapChartDisplay'
-import { MapChartForm } from './MapChartForm'
+import { GeoChartDisplay } from './GeoChartDisplay'
+import { GeoChartForm } from './GeoChartForm'
 
-export const TravelMapChart = () => {
-  const { options, fetchAndUpdateFlightMap, message, isLoading } = useAmadeusFlightMap()
+export const TravelGeoChart = () => {
+  const { options, fetchAndUpdateFlightMap, message, isLoading } = useAmadeusGeoChart()
   const [mapReady, setMapReady] = useState<boolean>(false)
 
   useEffect(() => {
@@ -27,12 +27,12 @@ export const TravelMapChart = () => {
 
   return (
     <div className="mx-auto h-full">
-      <MapChartForm
+      <GeoChartForm
         fetchAndUpdateFlightMap={fetchAndUpdateFlightMap}
         message={message}
         isLoading={isLoading}
       />
-      <MapChartDisplay options={options} isLoading={isLoading} mapReady={mapReady} />
+      <GeoChartDisplay options={options} isLoading={isLoading} mapReady={mapReady} />
     </div>
   )
 }

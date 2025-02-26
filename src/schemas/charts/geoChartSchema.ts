@@ -6,7 +6,7 @@ interface Params {
   componentSubType: string
 }
 
-export const mapChartSchema: EChartsOption = {
+export const geoChartSchema: EChartsOption = {
   title: {
     text: 'Flight Destinations with prices',
     left: 'center',

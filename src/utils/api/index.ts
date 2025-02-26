@@ -1,1 +1,2 @@
-export * from './mapChart.ts/amadeus'
+export * from './barChart'
+export * from './geoChart'
