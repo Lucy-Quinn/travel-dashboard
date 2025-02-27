@@ -31,7 +31,8 @@
       "@/utils/*": ["utils/*"],
       "@/schemas/*": ["schemas/*"]
     },
-    "target": "ES2017"
+    "target": "ES2017",
+    "types": ["jest"]
   },
   "include": [
     "next-env.d.ts",
