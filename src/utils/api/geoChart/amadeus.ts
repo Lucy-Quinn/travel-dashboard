@@ -82,6 +82,8 @@ export const getFlightInspirationWithLocations = async (
     '[Amadeus API] Flight location details fetched successfully for',
     flightDataWithLocations.length,
     'flights',
+    'with IATA codes:',
+    flightDataWithLocations.map((el) => el.iataCode),
   )
   return {
     success: true,

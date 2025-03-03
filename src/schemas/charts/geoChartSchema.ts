@@ -1,7 +1,8 @@
-import { formatFlightPriceLabel, formatLocationName } from '@/utils/formatters'
+import { formatLocationName } from '@/utils/formatters'
+import { formatFlightPriceLabel } from '@/utils/formatters/charts/geoChartFormatter/formatFlightPriceLabel'
 import type { EChartsOption } from 'echarts'
-interface Params {
-  value?: [number, number, number]
+export interface Params {
+  value?: [number, number, string?]
   name: string
   componentSubType: string
 }

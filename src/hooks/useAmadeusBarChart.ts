@@ -1,7 +1,7 @@
 import { fetchRecommendedDestinations } from '@/actions/recommended-destinations'
 import { barChartSchema } from '@/schemas/charts'
 import type { MessageState } from '@/types/travelChart'
-import { formatDestinationBarChart } from '@/utils/formatters/charts/barChartFormatter'
+import { formatDestinationBarChart } from '@/utils/formatters/charts/barChartFormatters/barChartFormatter'
 import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
 import type { FieldValues } from 'react-hook-form'
@@ -40,7 +40,7 @@ export const useAmadeusBarChart = () => {
 
       const formattedOptions = formatDestinationBarChart({
         travelData,
-        cityOrigin: city,
+        city,
       })
       setOptions(formattedOptions)
       setMessage({ success: message })

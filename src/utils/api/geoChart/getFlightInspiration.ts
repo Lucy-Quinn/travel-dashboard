@@ -58,7 +58,7 @@ export const getFlightInspiration = async ({
   )
 
   const flightDataIncludingDepartureLocation = [
-    { iataCode: airport ?? city, total: 0 },
+    { iataCode: airport ?? city, total: '0' },
     ...flightDataWithSelectedFields,
   ]
 

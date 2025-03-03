@@ -1,7 +1,7 @@
 import { fetchFlightInspiration } from '@/actions/flight-inspiration'
 import { geoChartSchema } from '@/schemas/charts'
 import type { MessageState } from '@/types/travelChart'
-import { formatFlightMap } from '@/utils/formatters/charts/geoChartFormatter'
+import { formatGeoChart } from '@/utils/formatters/charts/geoChartFormatter'
 import type { EChartsOption } from 'echarts'
 import { useState } from 'react'
 import type { FieldValues } from 'react-hook-form'
@@ -42,9 +42,9 @@ export const useAmadeusGeoChart = () => {
         return
       }
 
-      const formattedOptions = formatFlightMap({
+      const formattedOptions = formatGeoChart({
         flightData,
-        cityOrigin: departureLocation,
+        city: departureLocation,
       })
 
       setOptions(formattedOptions)

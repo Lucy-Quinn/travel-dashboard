@@ -65,7 +65,7 @@ export const getDepartureLocation = async ({
   const { cityName } = address
   const departureLocationData = {
     iataCode: departureLocationIataCode,
-    total: 0,
+    total: '0',
     airportName,
     geoCode,
     cityName,

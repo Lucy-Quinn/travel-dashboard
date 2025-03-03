@@ -30,13 +30,13 @@ export type FlightInspiration = {
   departureDate: string
   returnDate: string
   price: {
-    total: number
+    total: string
   }
 }
 
 export type FlightDestinationPrice = {
   iataCode: string
-  total: number
+  total: string
 }
 
 export type FlightLocation = {
@@ -63,7 +63,7 @@ export type FlightDestinationWithPrice = {
   airportName: string
   iataCode: string
   cityName: string
-  total: number
+  total: string
   geoCode: {
     latitude: number
     longitude: number

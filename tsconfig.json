@@ -41,7 +41,8 @@
     "tailwind.config.js",
     ".next/types/**/*.ts",
     "src/utils/api/geoChart",
-    "src/utils/api/barChart"
+    "src/utils/api/barChart",
+    "src/utils/formatters"
   ],
   "exclude": ["node_modules"]
 }

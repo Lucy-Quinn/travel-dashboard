@@ -73,7 +73,7 @@ export const getDestinationLocations = async ({
         success: true
         data: {
           iataCode: string
-          total: number
+          total: string
           airportName: string
           geoCode: { latitude: number; longitude: number }
           cityName: string
