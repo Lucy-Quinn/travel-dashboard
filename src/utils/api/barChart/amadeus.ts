@@ -10,7 +10,7 @@ export const getRecommendedDestinations = async (cityCode: string) => {
     message: tokenMessage,
   } = await getAmadeusToken()
   if (!tokenSuccess || !token) {
-    console.error('[Amadeus API] Error fetching token:', tokenMessage)
+    console.error(`[Amadeus API] Error fetching token: ${tokenMessage}`)
     return { success: tokenSuccess, message: tokenMessage }
   }
 
@@ -21,7 +21,9 @@ export const getRecommendedDestinations = async (cityCode: string) => {
     endpointType: AMADEUS_ENDPOINTS.RECOMMENDED_DESTINATIONS,
   })
   if (!success) {
-    console.error(`[API] Error fetching Amadeus recommended destinations: ${message}`)
+    console.error(
+      `[API] Error fetching Amadeus recommended destinations: ${message || 'Unknown error'}`,
+    )
     return {
       success: false,
       message: message || MESSAGES.FETCH_RECOMMENDED_DESTINATIONS_REQUEST_FAILED,
