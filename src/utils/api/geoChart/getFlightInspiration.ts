@@ -23,12 +23,12 @@ export const getFlightInspiration = async ({
     `[Amadeus API] Fetching flight inspiration search results from origin: ${city}`,
   )
 
-  const { success, data, message } = await fetchFromAmadeus(
-    `/shopping/flight-destinations?origin=${city}`,
+  const { success, data, message } = await fetchFromAmadeus({
+    endpoint: `/shopping/flight-destinations?origin=${city}`,
     token,
-    {},
-    AMADEUS_ENDPOINTS.FLIGHT_INSPIRATION,
-  )
+    options: {},
+    endpointType: AMADEUS_ENDPOINTS.FLIGHT_INSPIRATION,
+  })
 
   if (!success) {
     console.error('[Amadeus API] Error fetching flight inspiration:', message)

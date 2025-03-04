@@ -23,18 +23,18 @@ export const getAmadeusToken = async (): Promise<
     client_secret: clientSecret,
   })
 
-  const response = await fetchFromAmadeus(
-    url,
-    '',
-    {
+  const response = await fetchFromAmadeus({
+    endpoint: url,
+    token: '',
+    options: {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: urlencoded.toString(),
     },
-    AMADEUS_ENDPOINTS.TOKEN,
-  )
+    endpointType: AMADEUS_ENDPOINTS.TOKEN,
+  })
 
   if (!response.success) {
     console.error('[Amadeus API] Error fetching token:', response.message)

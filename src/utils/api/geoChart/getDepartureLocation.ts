@@ -36,12 +36,12 @@ export const getDepartureLocation = async ({
     }
   }
 
-  const response = await fetchFromAmadeus(
-    `/reference-data/locations?subType=AIRPORT&keyword=${departureLocationIataCode}`,
+  const response = await fetchFromAmadeus({
+    endpoint: `/reference-data/locations?subType=AIRPORT&keyword=${departureLocationIataCode}`,
     token,
-    {},
-    AMADEUS_ENDPOINTS.DEPARTURE_LOCATION,
-  )
+    options: {},
+    endpointType: AMADEUS_ENDPOINTS.DEPARTURE_LOCATION,
+  })
 
   if (!response.success) {
     console.error('[Amadeus API] Error fetching departure location:', response.message)

@@ -1,3 +1,5 @@
+import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
+
 export type ServerActionResponse<T> = {
   success: boolean
   message?: string
@@ -69,3 +71,5 @@ export type FlightDestinationWithPrice = {
     longitude: number
   }
 }
+
+export type AmadeusEndpoint = (typeof AMADEUS_ENDPOINTS)[keyof typeof AMADEUS_ENDPOINTS]

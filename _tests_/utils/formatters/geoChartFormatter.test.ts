@@ -1,24 +1,21 @@
 import type { FormatGeoChartProps } from '@/utils/formatters/charts/geoChartFormatter'
-import { generateChartHeadingText } from '@/utils/formatters/charts/helpers'
 import type { EChartsOption } from 'echarts-for-react'
-import cloneDeep from 'lodash/cloneDeep'
 import type { LinesData, ScatterData, Series } from './types'
 
 // Mocks
-jest.mock('lodash/cloneDeep', () =>
-  jest.fn((obj) => jest.requireActual('lodash/cloneDeep')(obj)),
-)
+const mockCloneDeep = jest.fn((obj) => jest.requireActual('lodash/cloneDeep')(obj))
+jest.mock('lodash/cloneDeep', () => mockCloneDeep)
 
-jest.doMock('@/schemas/charts', () => ({
+const mockGenerateChartHeadingText = jest.fn()
+jest.mock('@/utils/formatters/charts/helpers', () => ({
+  generateChartHeadingText: mockGenerateChartHeadingText,
+}))
+
+jest.mock('@/schemas/charts', () => ({
   geoChartSchema: geoChartSchemaSkeleton,
 }))
 
-jest.mock('@/utils/formatters/charts/helpers', () => ({
-  generateChartHeadingText: jest.fn(),
-}))
-
 // Constants & Test Data
-
 const geoChartSchemaSkeleton: EChartsOption = Object.freeze({
   title: { text: '' },
   tooltip: {
@@ -79,15 +76,16 @@ const flightData = [
 
 const city = 'MAD'
 
-const createTestInput = () => ({
-  flightData,
-  city,
-})
-let input: FormatGeoChartProps
-
 const baseText = 'Recommended destinations'
 const cityName = 'Madrid'
 const fullTitle = `${baseText} from ${cityName}`
+let input: FormatGeoChartProps
+
+const createTestInput = (): FormatGeoChartProps => ({
+  flightData,
+  city,
+})
+
 let response: EChartsOption = {
   ...geoChartSchemaSkeleton,
   title: {
@@ -147,17 +145,14 @@ let response: EChartsOption = {
   ],
 }
 
-describe('barChartFormatter', () => {
+describe('geoChartFormatter', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+
     input = createTestInput()
-    ;(generateChartHeadingText as jest.Mock).mockReturnValue(
+    ;(mockGenerateChartHeadingText as jest.Mock).mockReturnValue(
       `${baseText} from ${cityName}`,
     )
-  })
-
-  afterEach(() => {
-    jest.restoreAllMocks()
   })
 
   describe('General Formatting', () => {
@@ -240,15 +235,15 @@ describe('barChartFormatter', () => {
         const { formatGeoChart } = await import('@/utils/formatters')
 
         formatGeoChart(input)
-        expect(cloneDeep).toHaveBeenCalledTimes(1)
-        expect(cloneDeep).toHaveBeenCalledWith(geoChartSchemaSkeleton)
+        expect(mockCloneDeep).toHaveBeenCalledTimes(1)
+        expect(mockCloneDeep).toHaveBeenCalledWith(geoChartSchemaSkeleton)
       })
 
       it('should call cloneDeep zero times if flightData and the city are empty values', async () => {
         const { formatGeoChart } = await import('@/utils/formatters')
         input = { flightData: [], city: '' }
         formatGeoChart(input)
-        expect(cloneDeep).toHaveBeenCalledTimes(0)
+        expect(mockCloneDeep).toHaveBeenCalledTimes(0)
       })
     })
   })
@@ -258,7 +253,7 @@ describe('barChartFormatter', () => {
       const { formatGeoChart } = await import('@/utils/formatters')
 
       formatGeoChart(input)
-      expect(generateChartHeadingText).toHaveBeenCalledTimes(2)
+      expect(mockGenerateChartHeadingText).toHaveBeenCalledTimes(2)
     })
   })
 

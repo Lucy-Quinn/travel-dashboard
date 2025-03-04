@@ -1,17 +1,17 @@
 import { FormatDestinationBarChartProps } from '@/utils/formatters/charts/barChartFormatters'
-import { generateChartHeadingText } from '@/utils/formatters/charts/helpers'
 import type { EChartsOption } from 'echarts-for-react'
 
 // Mock Definitions
+const mockGenerateChartHeadingText = jest.fn()
 jest.mock('@/utils/formatters/charts/helpers', () => ({
-  generateChartHeadingText: jest.fn(),
+  generateChartHeadingText: mockGenerateChartHeadingText,
 }))
 
-jest.doMock('@/schemas/charts', () => ({
+jest.mock('@/schemas/charts', () => ({
   barChartSchema: barChartSchemaSkeleton,
 }))
 
-jest.doMock('@/constants/travelChart', () => ({
+jest.mock('@/constants/travelChart', () => ({
   CITY_OPTIONS: cityOptions,
 }))
 
@@ -69,14 +69,12 @@ let response = {
 
 describe('barChartFormatter', () => {
   beforeEach(() => {
+    jest.clearAllMocks()
+
     input = createTestInput()
-    ;(generateChartHeadingText as jest.Mock).mockReturnValue(
+    ;(mockGenerateChartHeadingText as jest.Mock).mockReturnValue(
       `${baseText} from ${cityName}`,
     )
-  })
-
-  afterEach(() => {
-    jest.restoreAllMocks()
   })
 
   describe('General Formatting', () => {
@@ -113,12 +111,12 @@ describe('barChartFormatter', () => {
       const { formatDestinationBarChart } = await import('@/utils/formatters')
 
       formatDestinationBarChart(input)
-      expect(generateChartHeadingText).toHaveBeenCalledTimes(2)
-      expect(generateChartHeadingText).toHaveBeenCalledWith({
+      expect(mockGenerateChartHeadingText).toHaveBeenCalledTimes(2)
+      expect(mockGenerateChartHeadingText).toHaveBeenCalledWith({
         baseText: 'Recommended destinations',
         cityName: 'Madrid',
       })
-      expect(generateChartHeadingText).toHaveBeenCalledWith({
+      expect(mockGenerateChartHeadingText).toHaveBeenCalledWith({
         baseText: 'Recommended destinations',
         cityName: 'Madrid',
         isMobile: true,
@@ -132,11 +130,11 @@ describe('barChartFormatter', () => {
 
       formatDestinationBarChart(input)
 
-      expect(generateChartHeadingText).toHaveBeenCalledWith({
+      expect(mockGenerateChartHeadingText).toHaveBeenCalledWith({
         baseText: 'Recommended destinations',
         cityName,
       })
-      expect(generateChartHeadingText).toHaveBeenLastCalledWith({
+      expect(mockGenerateChartHeadingText).toHaveBeenLastCalledWith({
         baseText: 'Recommended destinations',
         cityName,
         isMobile: true,

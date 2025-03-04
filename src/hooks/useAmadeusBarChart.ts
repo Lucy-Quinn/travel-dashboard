@@ -2,7 +2,7 @@ import { fetchRecommendedDestinations } from '@/actions/recommended-destinations
 import { barChartSchema } from '@/schemas/charts'
 import type { MessageState } from '@/types/travelChart'
 import { formatDestinationBarChart } from '@/utils/formatters/charts/barChartFormatters/barChartFormatter'
-import type { EChartsOption } from 'echarts'
+import type { EChartsOption } from 'echarts-for-react'
 import { useState } from 'react'
 import type { FieldValues } from 'react-hook-form'
 

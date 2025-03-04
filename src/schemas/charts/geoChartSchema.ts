@@ -1,6 +1,6 @@
 import { formatLocationName } from '@/utils/formatters'
 import { formatFlightPriceLabel } from '@/utils/formatters/charts/geoChartFormatter/formatFlightPriceLabel'
-import type { EChartsOption } from 'echarts'
+import type { EChartsOption } from 'echarts-for-react'
 export interface Params {
   value?: [number, number, string?]
   name: string
@@ -25,8 +25,8 @@ export const geoChartSchema: EChartsOption = {
       color: '#1E3A8A',
       fontWeight: 'bold',
     },
-    formatter: function (params) {
-      const { value, name, componentSubType } = params as Params
+    formatter: function (params: Params) {
+      const { value, name, componentSubType } = params
       if (componentSubType === 'scatter') {
         return formatFlightPriceLabel({ value, name })
       }
@@ -68,8 +68,8 @@ export const geoChartSchema: EChartsOption = {
       label: {
         show: true,
         position: 'right',
-        formatter: (params) => {
-          const { name = '' } = params as Params
+        formatter: (params: Params) => {
+          const { name = '' } = params
           const { airportName } = formatLocationName(String(name))
           return airportName
         },

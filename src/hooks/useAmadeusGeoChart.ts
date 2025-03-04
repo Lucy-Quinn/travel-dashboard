@@ -2,7 +2,7 @@ import { fetchFlightInspiration } from '@/actions/flight-inspiration'
 import { geoChartSchema } from '@/schemas/charts'
 import type { MessageState } from '@/types/travelChart'
 import { formatGeoChart } from '@/utils/formatters/charts/geoChartFormatter'
-import type { EChartsOption } from 'echarts'
+import type { EChartsOption } from 'echarts-for-react'
 import { useState } from 'react'
 import type { FieldValues } from 'react-hook-form'
 

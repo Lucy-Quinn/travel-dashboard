@@ -14,12 +14,12 @@ export const getRecommendedDestinations = async (cityCode: string) => {
     return { success: tokenSuccess, message: tokenMessage }
   }
 
-  const { success, data, message } = await fetchFromAmadeus(
-    `/reference-data/recommended-locations?cityCodes=${cityCode}`,
+  const { success, data, message } = await fetchFromAmadeus({
+    endpoint: `/reference-data/recommended-locations?cityCodes=${cityCode}`,
     token,
-    {},
-    AMADEUS_ENDPOINTS.RECOMMENDED_DESTINATIONS,
-  )
+    options: {},
+    endpointType: AMADEUS_ENDPOINTS.RECOMMENDED_DESTINATIONS,
+  })
   if (!success) {
     console.error(`[API] Error fetching Amadeus recommended destinations: ${message}`)
     return {

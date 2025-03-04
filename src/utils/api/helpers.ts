@@ -1,16 +1,9 @@
-import { AMADEUS_CONFIG, MESSAGES } from '@/constants/serverActions'
+import { AMADEUS_CONFIG, AMADEUS_ENDPOINTS, MESSAGES } from '@/constants/serverActions'
+import type { AmadeusEndpoint } from '@/types/amadeus'
 
-export const AMADEUS_ENDPOINTS = {
-  TOKEN: 'token',
-  FLIGHT_INSPIRATION: 'flightInspiration',
-  DEPARTURE_LOCATION: 'departureLocation',
-  DESTINATION_LOCATIONS: 'destinationLocations',
-  RECOMMENDED_DESTINATIONS: 'recommendedDestinations',
-} as const
-
-export type AmadeusEndpoint = (typeof AMADEUS_ENDPOINTS)[keyof typeof AMADEUS_ENDPOINTS]
-
-export const getServerActionMessages = (endpoint: AmadeusEndpoint) => {
+export const getServerActionMessages = (
+  endpoint: AmadeusEndpoint,
+): { requestFailed: string; dataInvalid: string } => {
   const messages = {
     [AMADEUS_ENDPOINTS.TOKEN]: {
       requestFailed: MESSAGES.FETCH_TOKEN_REQUEST_FAILED,
@@ -36,12 +29,26 @@ export const getServerActionMessages = (endpoint: AmadeusEndpoint) => {
   return messages[endpoint]
 }
 
-export const fetchFromAmadeus = async (
-  endpoint: string,
-  token: string,
-  options: RequestInit = {},
-  endpointType: AmadeusEndpoint,
-) => {
+export interface FetchFromAmadeusProps {
+  endpoint: string
+  token: string
+  options: RequestInit
+  endpointType: AmadeusEndpoint
+}
+
+export const fetchFromAmadeus = async ({
+  endpoint,
+  token,
+  options,
+  endpointType,
+}: FetchFromAmadeusProps) => {
+  console.log(
+    '🚀 ~   endpoint, token, options, endpointType:',
+    endpoint,
+    token,
+    options,
+    endpointType,
+  )
   try {
     const headers =
       token.length === 0

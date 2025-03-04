@@ -22,12 +22,12 @@ export const getDestinationLocations = async ({
 
   const flightDetails = await Promise.allSettled(
     flightData.map(async ({ iataCode, total }) => {
-      const response = await fetchFromAmadeus(
-        `/reference-data/locations?subType=AIRPORT&keyword=${iataCode}`,
+      const response = await fetchFromAmadeus({
+        endpoint: `/reference-data/locations?subType=AIRPORT&keyword=${iataCode}`,
         token,
-        {},
-        AMADEUS_ENDPOINTS.DESTINATION_LOCATIONS,
-      )
+        options: {},
+        endpointType: AMADEUS_ENDPOINTS.DESTINATION_LOCATIONS,
+      })
 
       if (!response.success) {
         console.error(

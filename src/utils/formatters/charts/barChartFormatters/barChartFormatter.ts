@@ -1,8 +1,8 @@
 import { CITY_OPTIONS } from '@/constants/travelChart'
 import { barChartSchema } from '@/schemas/charts'
 import type { DestinationRecommendation } from '@/types/amadeus'
-import type { EChartsOption } from 'echarts'
-import { generateChartHeadingText } from '../helpers'
+import { generateChartHeadingText } from '@/utils/formatters/charts/helpers'
+import type { EChartsOption } from 'echarts-for-react'
 
 export interface FormatDestinationBarChartProps {
   travelData: DestinationRecommendation[]

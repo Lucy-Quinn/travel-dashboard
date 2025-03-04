@@ -41,3 +41,11 @@ export const MESSAGES = {
   FETCH_FLIGHT_DETAILS_FAILED:
     'Failed to fetch Amadeus API flight details. Please try again.',
 } as const
+
+export const AMADEUS_ENDPOINTS = {
+  TOKEN: 'token',
+  FLIGHT_INSPIRATION: 'flightInspiration',
+  DEPARTURE_LOCATION: 'departureLocation',
+  DESTINATION_LOCATIONS: 'destinationLocations',
+  RECOMMENDED_DESTINATIONS: 'recommendedDestinations',
+} as const

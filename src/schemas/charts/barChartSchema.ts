@@ -1,5 +1,5 @@
-import type { EChartsOption } from 'echarts'
 import { graphic } from 'echarts'
+import type { EChartsOption } from 'echarts-for-react'
 
 export const barChartSchema: EChartsOption = {
   title: {
