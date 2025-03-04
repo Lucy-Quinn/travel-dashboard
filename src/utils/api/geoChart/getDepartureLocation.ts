@@ -1,3 +1,4 @@
+import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
 import type {
   AmadeusAPIResponse,
   FlightDestinationPrice,
@@ -5,7 +6,7 @@ import type {
   FlightLocation,
   ServerActionResponse,
 } from '@/types/amadeus'
-import { AMADEUS_ENDPOINTS, fetchFromAmadeus, getServerActionMessages } from '../helpers'
+import { fetchFromAmadeus, getServerActionMessages } from '../helpers'
 
 interface GetDepartureLocationProps {
   departureLocation: string

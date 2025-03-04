@@ -42,13 +42,6 @@ export const fetchFromAmadeus = async ({
   options,
   endpointType,
 }: FetchFromAmadeusProps) => {
-  console.log(
-    '🚀 ~   endpoint, token, options, endpointType:',
-    endpoint,
-    token,
-    options,
-    endpointType,
-  )
   try {
     const headers =
       token.length === 0
@@ -77,7 +70,7 @@ export const fetchFromAmadeus = async ({
       }
     }
 
-    if (!data) {
+    if (!data || data.length === 0) {
       console.error(`[Amadeus API] No data found for ${endpoint}`)
       return {
         success: false,

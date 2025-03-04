@@ -1,6 +1,6 @@
-import { AMADEUS_CONFIG, MESSAGES } from '@/constants/serverActions'
+import { AMADEUS_CONFIG, AMADEUS_ENDPOINTS, MESSAGES } from '@/constants/serverActions'
 import type { AmadeusAuthResponse, ServerActionResponse } from '@/types/amadeus'
-import { AMADEUS_ENDPOINTS, fetchFromAmadeus, getServerActionMessages } from '../helpers'
+import { fetchFromAmadeus, getServerActionMessages } from '../helpers'
 
 export const getAmadeusToken = async (): Promise<
   ServerActionResponse<AmadeusAuthResponse>

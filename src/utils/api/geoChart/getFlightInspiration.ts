@@ -1,10 +1,11 @@
+import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
 import type {
   AmadeusAPIResponse,
   FlightDestinationPrice,
   FlightInspiration,
   ServerActionResponse,
 } from '@/types/amadeus'
-import { AMADEUS_ENDPOINTS, fetchFromAmadeus } from '../helpers'
+import { fetchFromAmadeus } from '../helpers'
 
 interface GetFlightInspirationProps {
   city: string
