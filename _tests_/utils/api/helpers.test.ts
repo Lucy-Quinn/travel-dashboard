@@ -1,11 +1,13 @@
 import type { AmadeusEndpoint } from '@/types/amadeus'
+import { mockAmadeusConfig } from './constants'
+
+jest.mock('@/constants/serverActions', () => ({
+  AMADEUS_CONFIG: mockAmadeusConfig,
+  MESSAGES: mockMessages,
+  AMADEUS_ENDPOINTS: mockAmadeusEndpoints,
+}))
 
 // Shared constants (used by both functions)
-const mockAmadeusConfig = {
-  clientId: 'fakeClientId',
-  clientSecret: 'fakeClientSecret',
-  apiUrl: 'fakeApiUrl',
-}
 const mockMessages = {
   FETCH_TOKEN_REQUEST_FAILED: 'Failed to fetch API endpoint.',
   FETCH_TOKEN_DATA_INVALID: 'Invalid data received from API endpoint.',
@@ -35,11 +37,6 @@ describe('API Helpers', () => {
   describe('getServerActionMessages', () => {
     beforeEach(() => {
       jest.clearAllMocks()
-      jest.mock('@/constants/serverActions', () => ({
-        AMADEUS_CONFIG: mockAmadeusConfig,
-        MESSAGES: mockMessages,
-        AMADEUS_ENDPOINTS: mockAmadeusEndpoints,
-      }))
     })
 
     it('should return the correct messages for the token endpoint', async () => {

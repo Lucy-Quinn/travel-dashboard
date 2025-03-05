@@ -1,6 +1,6 @@
 import { AMADEUS_CONFIG, AMADEUS_ENDPOINTS, MESSAGES } from '@/constants/serverActions'
 import type { AmadeusAuthResponse, ServerActionResponse } from '@/types/amadeus'
-import { fetchFromAmadeus, getServerActionMessages } from '../helpers'
+import { fetchFromAmadeus, getServerActionMessages } from '@/utils/api/helpers'
 
 export const getAmadeusToken = async (): Promise<
   ServerActionResponse<AmadeusAuthResponse>
@@ -23,7 +23,7 @@ export const getAmadeusToken = async (): Promise<
     client_secret: clientSecret,
   })
 
-  const response = await fetchFromAmadeus({
+  const { success, data, message } = await fetchFromAmadeus({
     endpoint: url,
     token: '',
     options: {
@@ -36,21 +36,26 @@ export const getAmadeusToken = async (): Promise<
     endpointType: AMADEUS_ENDPOINTS.TOKEN,
   })
 
-  if (!response.success) {
-    console.error('[Amadeus API] Error fetching token:', response.message)
-    return response
+  if (!success) {
+    console.error(`[Amadeus API] Error fetching token: ${message || 'Unknown error'}`)
+    return {
+      success,
+      message,
+    }
   }
 
-  const token = response.data.access_token || ''
+  const token = data.access_token || ''
 
   if (!token) {
+    const dataInvalidMessage = getServerActionMessages(
+      AMADEUS_ENDPOINTS.TOKEN,
+    ).dataInvalid
     console.error(
-      '[Amadeus API] Error fetching token:',
-      getServerActionMessages(AMADEUS_ENDPOINTS.TOKEN).dataInvalid,
+      `[Amadeus API] Error fetching token: ${dataInvalidMessage || 'Unknown error'}`,
     )
     return {
       success: false,
-      message: getServerActionMessages(AMADEUS_ENDPOINTS.TOKEN).dataInvalid,
+      message: dataInvalidMessage,
     }
   }
 
