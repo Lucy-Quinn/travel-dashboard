@@ -7,11 +7,18 @@ export type ServerActionResponse<T> = {
 }
 
 export type AmadeusAPIResponse<T> = {
-  data: T[]
-  error_description?: string
+  data: T[] | T
+  errors?: {
+    title: string
+    detail: string
+  }[]
 }
 
-export type AmadeusAuthResponse = string
+export type AmadeusAuthResponse = {
+  access_token: AccessToken
+}
+
+export type AccessToken = string
 
 export type DestinationRecommendation = {
   subtype: string

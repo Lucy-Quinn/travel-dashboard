@@ -24,13 +24,13 @@ let fetchFromAmadeusInput = {
   endpointType: mockAmadeusEndpoints.TOKEN,
 }
 const responseData = { data: ['fakeData'] }
-const successfulResponse = { success: true, data: responseData }
-const unsuccessfulResponseData = {
+const successResponse = { success: true, data: ['fakeData'] }
+const errorResponseData = {
   errors: [{ title: 'Unauthorized', detail: 'Invalid token' }],
 }
-let unsuccessfulResponse = {
+const errorResponse = {
   success: false,
-  message: unsuccessfulResponseData.errors[0].detail,
+  message: errorResponseData.errors[0].detail,
 }
 
 describe('API Helpers', () => {
@@ -82,7 +82,7 @@ describe('API Helpers', () => {
         ) as jest.Mock
 
         const result = await fetchFromAmadeus(fetchFromAmadeusInput)
-        expect(result).toEqual(successfulResponse)
+        expect(result).toEqual(successResponse)
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch).toHaveBeenCalledWith(
           `${mockAmadeusConfig.apiUrl}${fetchFromAmadeusInput.endpoint}`,
@@ -114,7 +114,7 @@ describe('API Helpers', () => {
         }
 
         const result = await fetchFromAmadeus(fetchFromAmadeusInput)
-        expect(result).toEqual(successfulResponse)
+        expect(result).toEqual(successResponse)
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch).toHaveBeenCalledWith(
           `${mockAmadeusConfig.apiUrl}${fetchFromAmadeusInput.endpoint}`,
@@ -132,7 +132,7 @@ describe('API Helpers', () => {
         global.fetch = jest.fn(() =>
           Promise.resolve({
             ok: false,
-            json: () => Promise.resolve(unsuccessfulResponseData),
+            json: () => Promise.resolve(errorResponseData),
           }),
         ) as jest.Mock
 
@@ -144,7 +144,7 @@ describe('API Helpers', () => {
         }
 
         const result = await fetchFromAmadeus(fetchFromAmadeusInput)
-        expect(result).toEqual(unsuccessfulResponse)
+        expect(result).toEqual(errorResponse)
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch).toHaveBeenCalledWith(
           `${mockAmadeusConfig.apiUrl}${fetchFromAmadeusInput.endpoint}`,
@@ -154,20 +154,20 @@ describe('API Helpers', () => {
           },
         )
         expect(console.error).toHaveBeenCalledWith(
-          `[Amadeus API] Error fetching ${fetchFromAmadeusInput.endpoint}: ${unsuccessfulResponseData.errors[0].title}`,
+          `[Amadeus API] Error fetching ${fetchFromAmadeusInput.endpoint}: ${errorResponseData.errors[0].title}`,
         )
       })
       it('should return an error when the response is not ok and `detail` is missing', async () => {
         const { fetchFromAmadeus } = await import('@/utils/api/helpers')
 
-        const unsuccessfulResponseData = {
+        const errorResponseDataUpdated = {
           errors: [{ title: '', detail: '' }],
         }
 
         global.fetch = jest.fn(() =>
           Promise.resolve({
             ok: false,
-            json: () => Promise.resolve(unsuccessfulResponseData),
+            json: () => Promise.resolve(errorResponseDataUpdated),
           }),
         ) as jest.Mock
 
@@ -185,7 +185,7 @@ describe('API Helpers', () => {
       it('should return an error when no data is returned', async () => {
         const { fetchFromAmadeus } = await import('@/utils/api/helpers')
 
-        unsuccessfulResponse = {
+        const errorResponseUpdated = {
           success: false,
           message: mockMessages.FETCH_TOKEN_DATA_INVALID,
         }
@@ -193,12 +193,12 @@ describe('API Helpers', () => {
         global.fetch = jest.fn(() =>
           Promise.resolve({
             ok: true,
-            json: () => Promise.resolve([]),
+            json: () => Promise.resolve({ data: [] }),
           }),
         ) as jest.Mock
 
         const result = await fetchFromAmadeus(fetchFromAmadeusInput)
-        expect(result).toEqual(unsuccessfulResponse)
+        expect(result).toEqual(errorResponseUpdated)
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch).toHaveBeenCalledWith(
           `${mockAmadeusConfig.apiUrl}${fetchFromAmadeusInput.endpoint}`,
@@ -215,7 +215,7 @@ describe('API Helpers', () => {
       it('should return a network error when fetch fails', async () => {
         const { fetchFromAmadeus } = await import('@/utils/api/helpers')
 
-        unsuccessfulResponse = {
+        const errorResponseUpdated = {
           success: false,
           message: 'Network error',
         }
@@ -225,7 +225,7 @@ describe('API Helpers', () => {
         ) as jest.Mock
 
         const result = await fetchFromAmadeus(fetchFromAmadeusInput)
-        expect(result).toEqual(unsuccessfulResponse)
+        expect(result).toEqual(errorResponseUpdated)
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch).toHaveBeenCalledWith(
           `${mockAmadeusConfig.apiUrl}${fetchFromAmadeusInput.endpoint}`,

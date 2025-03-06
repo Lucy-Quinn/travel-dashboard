@@ -1,5 +1,5 @@
 import { AMADEUS_ENDPOINTS, MESSAGES } from '@/constants/serverActions'
-import type { AmadeusAPIResponse, DestinationRecommendation } from '@/types/amadeus'
+import type { DestinationRecommendation } from '@/types/amadeus'
 import { getAmadeusToken } from '@/utils/api/geoChart/getAmadeusToken'
 import { fetchFromAmadeus } from '@/utils/api/helpers'
 
@@ -14,7 +14,7 @@ export const getRecommendedDestinations = async (cityCode: string) => {
     return { success: tokenSuccess, message: tokenMessage }
   }
 
-  const { success, data, message } = await fetchFromAmadeus({
+  const { success, data, message } = await fetchFromAmadeus<DestinationRecommendation>({
     endpoint: `/reference-data/recommended-locations?cityCodes=${cityCode}`,
     token,
     options: {},
@@ -30,11 +30,11 @@ export const getRecommendedDestinations = async (cityCode: string) => {
     }
   }
 
-  const travelResponseData: AmadeusAPIResponse<DestinationRecommendation> = data
+  const travelResponseData: DestinationRecommendation[] = data ?? []
 
   console.log(
     '[API] Successfully fetched Amadeus recommended destinations with city origin:',
     cityCode,
   )
-  return { success: true, data: travelResponseData.data }
+  return { success: true, data: travelResponseData }
 }

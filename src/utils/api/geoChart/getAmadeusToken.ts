@@ -1,10 +1,12 @@
 import { AMADEUS_CONFIG, AMADEUS_ENDPOINTS, MESSAGES } from '@/constants/serverActions'
-import type { AmadeusAuthResponse, ServerActionResponse } from '@/types/amadeus'
+import type {
+  AccessToken,
+  AmadeusAuthResponse,
+  ServerActionResponse,
+} from '@/types/amadeus'
 import { fetchFromAmadeus, getServerActionMessages } from '@/utils/api/helpers'
 
-export const getAmadeusToken = async (): Promise<
-  ServerActionResponse<AmadeusAuthResponse>
-> => {
+export const getAmadeusToken = async (): Promise<ServerActionResponse<AccessToken>> => {
   const { clientId, clientSecret, apiUrl } = AMADEUS_CONFIG
 
   if (!clientId || !clientSecret || !apiUrl) {
@@ -23,7 +25,7 @@ export const getAmadeusToken = async (): Promise<
     client_secret: clientSecret,
   })
 
-  const { success, data, message } = await fetchFromAmadeus({
+  const { success, data, message } = await fetchFromAmadeus<AmadeusAuthResponse>({
     endpoint: url,
     token: '',
     options: {
@@ -44,7 +46,7 @@ export const getAmadeusToken = async (): Promise<
     }
   }
 
-  const token = data.access_token || ''
+  const token: AccessToken = data?.[0]?.access_token || ''
 
   if (!token) {
     const dataInvalidMessage = getServerActionMessages(

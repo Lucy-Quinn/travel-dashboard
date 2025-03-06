@@ -1,6 +1,5 @@
 import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
 import type {
-  AmadeusAPIResponse,
   FlightDestinationPrice,
   FlightInspiration,
   ServerActionResponse,
@@ -24,7 +23,7 @@ export const getFlightInspiration = async ({
     `[Amadeus API] Fetching flight inspiration search results from origin: ${city}`,
   )
 
-  const { success, data, message } = await fetchFromAmadeus({
+  const { success, data, message } = await fetchFromAmadeus<FlightInspiration>({
     endpoint: `/shopping/flight-destinations?origin=${city}`,
     token,
     options: {},
@@ -36,11 +35,11 @@ export const getFlightInspiration = async ({
     return { success, message }
   }
 
-  const flightData: AmadeusAPIResponse<FlightInspiration> = data
+  let flightData: FlightInspiration[] = data ?? []
 
   if (airport) {
-    flightData.data = flightData.data.filter(({ origin }) => origin === airport)
-    if (flightData.data.length === 0) {
+    flightData = flightData.filter(({ origin }) => origin === airport)
+    if (flightData.length === 0) {
       console.error(
         `[Amadeus API] Error fetching flight inspiration for airport: ${airport}`,
       )
@@ -51,14 +50,14 @@ export const getFlightInspiration = async ({
     }
   }
 
-  const flightDataWithSelectedFields = flightData.data.map(
+  const flightDataWithSelectedFields = flightData.map(
     ({ destination, price: { total } }) => ({
       iataCode: destination,
       total,
     }),
   )
 
-  const flightDataIncludingDepartureLocation = [
+  const flightDataIncludingDepartureLocation: FlightDestinationPrice[] = [
     { iataCode: airport ?? city, total: '0' },
     ...flightDataWithSelectedFields,
   ]

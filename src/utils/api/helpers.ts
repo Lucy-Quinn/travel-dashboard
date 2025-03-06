@@ -1,5 +1,9 @@
 import { AMADEUS_CONFIG, AMADEUS_ENDPOINTS, MESSAGES } from '@/constants/serverActions'
-import type { AmadeusEndpoint } from '@/types/amadeus'
+import type {
+  AmadeusAPIResponse,
+  AmadeusEndpoint,
+  ServerActionResponse,
+} from '@/types/amadeus'
 
 export const getServerActionMessages = (
   endpoint: AmadeusEndpoint,
@@ -29,6 +33,16 @@ export const getServerActionMessages = (
   return messages[endpoint]
 }
 
+function normalizeAmadeusResponse<T>(response: AmadeusAPIResponse<T>): T[] {
+  if ('data' in response) {
+    if (Array.isArray(response.data)) {
+      return response.data
+    }
+    return [response.data]
+  }
+  return [response]
+}
+
 export interface FetchFromAmadeusProps {
   endpoint: string
   token: string
@@ -36,12 +50,12 @@ export interface FetchFromAmadeusProps {
   endpointType: AmadeusEndpoint
 }
 
-export const fetchFromAmadeus = async ({
+export const fetchFromAmadeus = async <T>({
   endpoint,
   token,
   options,
   endpointType,
-}: FetchFromAmadeusProps) => {
+}: FetchFromAmadeusProps): Promise<ServerActionResponse<T[]>> => {
   try {
     const headers =
       token.length === 0
@@ -57,8 +71,9 @@ export const fetchFromAmadeus = async ({
       headers,
     })
 
-    const data = await response.json()
+    const data: AmadeusAPIResponse<T> = await response.json()
     const messages = getServerActionMessages(endpointType)
+    const normalizedData = normalizeAmadeusResponse(data)
 
     if (!response.ok) {
       console.error(
@@ -70,7 +85,7 @@ export const fetchFromAmadeus = async ({
       }
     }
 
-    if (!data || data.length === 0) {
+    if (!normalizedData || normalizedData.length === 0) {
       console.error(`[Amadeus API] No data found for ${endpoint}`)
       return {
         success: false,
@@ -78,7 +93,7 @@ export const fetchFromAmadeus = async ({
       }
     }
 
-    return { success: true, data }
+    return { success: true, data: normalizedData }
   } catch (error) {
     console.error(`[Amadeus API] Fetch error: ${error}`)
     return { success: false, message: 'Network error' }

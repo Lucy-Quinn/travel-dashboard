@@ -1,6 +1,5 @@
 import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
 import type {
-  AmadeusAPIResponse,
   FlightDestinationPrice,
   FlightDestinationWithPrice,
   FlightLocation,
@@ -8,7 +7,7 @@ import type {
 } from '@/types/amadeus'
 import { fetchFromAmadeus, getServerActionMessages } from '../helpers'
 
-interface GetDepartureLocationProps {
+export interface GetDepartureLocationProps {
   departureLocation: string
   flightData: FlightDestinationPrice[]
   token: string
@@ -37,32 +36,41 @@ export const getDepartureLocation = async ({
     }
   }
 
-  const response = await fetchFromAmadeus({
+  const { success, data, message } = await fetchFromAmadeus<FlightLocation>({
     endpoint: `/reference-data/locations?subType=AIRPORT&keyword=${departureLocationIataCode}`,
     token,
     options: {},
     endpointType: AMADEUS_ENDPOINTS.DEPARTURE_LOCATION,
   })
 
-  if (!response.success) {
-    console.error('[Amadeus API] Error fetching departure location:', response.message)
-    return response
-  }
-
-  const departureLocationDetails: AmadeusAPIResponse<FlightLocation> = response.data
-
-  if (!departureLocationDetails.data?.[0]) {
+  if (!success) {
     console.error(
-      '[Amadeus API] No location data found for departure location:',
-      getServerActionMessages(AMADEUS_ENDPOINTS.DEPARTURE_LOCATION).dataInvalid,
+      `[Amadeus API] Error fetching departure location: ${message || 'Unknown error'}`,
     )
     return {
-      success: false,
-      message: getServerActionMessages(AMADEUS_ENDPOINTS.DEPARTURE_LOCATION).dataInvalid,
+      success,
+      message,
     }
   }
 
-  const { name: airportName, geoCode, address } = departureLocationDetails.data[0]
+  const departureLocationDetails: FlightLocation[] = data ?? []
+
+  if (!departureLocationDetails?.[0]) {
+    const errorMessage = getServerActionMessages(
+      AMADEUS_ENDPOINTS.DEPARTURE_LOCATION,
+    ).dataInvalid
+    console.error(
+      `[Amadeus API] No location data found for departure location: ${
+        errorMessage || 'Unknown error'
+      }`,
+    )
+    return {
+      success: false,
+      message: errorMessage,
+    }
+  }
+
+  const { name: airportName, geoCode, address } = departureLocationDetails[0]
   const { cityName } = address
   const departureLocationData = {
     iataCode: departureLocationIataCode,

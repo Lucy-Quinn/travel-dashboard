@@ -1,6 +1,5 @@
 import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
 import type {
-  AmadeusAPIResponse,
   FlightDestinationPrice,
   FlightDestinationWithPrice,
   FlightLocation,
@@ -23,27 +22,27 @@ export const getDestinationLocations = async ({
 
   const flightDetails = await Promise.allSettled(
     flightData.map(async ({ iataCode, total }) => {
-      const response = await fetchFromAmadeus({
+      const { success, data, message } = await fetchFromAmadeus<FlightLocation>({
         endpoint: `/reference-data/locations?subType=AIRPORT&keyword=${iataCode}`,
         token,
         options: {},
         endpointType: AMADEUS_ENDPOINTS.DESTINATION_LOCATIONS,
       })
 
-      if (!response.success) {
-        console.error(
-          '[Amadeus API] Error fetching destination locations:',
-          response.message,
-        )
-        return response
+      if (!success) {
+        console.error('[Amadeus API] Error fetching destination locations:', message)
+        return {
+          success,
+          message,
+        }
       }
 
-      const locationDetails: AmadeusAPIResponse<FlightLocation> = response.data
+      const locationDetails: FlightLocation[] = data ?? []
 
       if (
-        !locationDetails.data?.[0]?.geoCode ||
-        (iataCode !== locationDetails.data?.[0]?.iataCode &&
-          iataCode !== locationDetails.data?.[0]?.address.cityCode)
+        !locationDetails?.[0]?.geoCode ||
+        (iataCode !== locationDetails?.[0]?.iataCode &&
+          iataCode !== locationDetails?.[0]?.address.cityCode)
       ) {
         console.error(
           '[Amadeus API] Error fetching destination locations:',
@@ -56,7 +55,7 @@ export const getDestinationLocations = async ({
         }
       }
 
-      const { name: airportName, geoCode, address } = locationDetails.data[0]
+      const { name: airportName, geoCode, address } = locationDetails[0]
       const { cityName } = address
 
       return {
