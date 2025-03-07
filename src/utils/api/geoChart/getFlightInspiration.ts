@@ -4,7 +4,7 @@ import type {
   FlightInspiration,
   ServerActionResponse,
 } from '@/types/amadeus'
-import { fetchFromAmadeus } from '../helpers'
+import { fetchFromAmadeus, getServerActionMessages } from '../helpers'
 
 interface GetFlightInspirationProps {
   city: string
@@ -30,12 +30,21 @@ export const getFlightInspiration = async ({
     endpointType: AMADEUS_ENDPOINTS.FLIGHT_INSPIRATION,
   })
 
-  if (!success) {
-    console.error('[Amadeus API] Error fetching flight inspiration:', message)
-    return { success, message }
+  if (!success || !data || !data[0]) {
+    const errorMessage =
+      message ||
+      getServerActionMessages(AMADEUS_ENDPOINTS.FLIGHT_INSPIRATION).requestFailed
+    console.error(
+      '[Amadeus API] Error fetching flight inspiration:',
+      errorMessage || 'Unknown error',
+    )
+    return {
+      success,
+      message: errorMessage,
+    }
   }
 
-  let flightData: FlightInspiration[] = data ?? []
+  let flightData: FlightInspiration[] = data
 
   if (airport) {
     flightData = flightData.filter(({ origin }) => origin === airport)

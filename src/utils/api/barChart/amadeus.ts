@@ -1,7 +1,7 @@
-import { AMADEUS_ENDPOINTS, MESSAGES } from '@/constants/serverActions'
+import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
 import type { DestinationRecommendation } from '@/types/amadeus'
 import { getAmadeusToken } from '@/utils/api/geoChart/getAmadeusToken'
-import { fetchFromAmadeus } from '@/utils/api/helpers'
+import { fetchFromAmadeus, getServerActionMessages } from '@/utils/api/helpers'
 
 export const getRecommendedDestinations = async (cityCode: string) => {
   const {
@@ -20,21 +20,24 @@ export const getRecommendedDestinations = async (cityCode: string) => {
     options: {},
     endpointType: AMADEUS_ENDPOINTS.RECOMMENDED_DESTINATIONS,
   })
+
   if (!success) {
+    const errorMessage =
+      message ||
+      getServerActionMessages(AMADEUS_ENDPOINTS.RECOMMENDED_DESTINATIONS).requestFailed
+
     console.error(
       `[API] Error fetching Amadeus recommended destinations: ${message || 'Unknown error'}`,
     )
     return {
       success: false,
-      message: message || MESSAGES.FETCH_RECOMMENDED_DESTINATIONS_REQUEST_FAILED,
+      message: errorMessage,
     }
   }
 
   const travelResponseData: DestinationRecommendation[] = data ?? []
 
-  console.log(
-    '[API] Successfully fetched Amadeus recommended destinations with city origin:',
-    cityCode,
-  )
+  console.log('[Amadeus API] Recommended destinations fetched successfully')
+
   return { success: true, data: travelResponseData }
 }

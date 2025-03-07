@@ -32,7 +32,7 @@ export const getDepartureLocation = async ({
     console.error('[Amadeus API] No departure location IATA code found')
     return {
       success: false,
-      message: getServerActionMessages(AMADEUS_ENDPOINTS.DEPARTURE_LOCATION).dataInvalid,
+      message: 'No departure location IATA code found',
     }
   }
 
@@ -43,34 +43,20 @@ export const getDepartureLocation = async ({
     endpointType: AMADEUS_ENDPOINTS.DEPARTURE_LOCATION,
   })
 
-  if (!success) {
+  if (!success || !data || !data[0]) {
+    const errorMessage =
+      message ||
+      getServerActionMessages(AMADEUS_ENDPOINTS.DEPARTURE_LOCATION).requestFailed
     console.error(
       `[Amadeus API] Error fetching departure location: ${message || 'Unknown error'}`,
     )
     return {
       success,
-      message,
-    }
-  }
-
-  const departureLocationDetails: FlightLocation[] = data ?? []
-
-  if (!departureLocationDetails?.[0]) {
-    const errorMessage = getServerActionMessages(
-      AMADEUS_ENDPOINTS.DEPARTURE_LOCATION,
-    ).dataInvalid
-    console.error(
-      `[Amadeus API] No location data found for departure location: ${
-        errorMessage || 'Unknown error'
-      }`,
-    )
-    return {
-      success: false,
       message: errorMessage,
     }
   }
 
-  const { name: airportName, geoCode, address } = departureLocationDetails[0]
+  const { name: airportName, geoCode, address } = data[0]
   const { cityName } = address
   const departureLocationData = {
     iataCode: departureLocationIataCode,

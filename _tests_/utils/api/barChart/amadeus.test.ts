@@ -4,13 +4,17 @@ import type {
   ServerActionResponse,
 } from '@/types/amadeus'
 
+const mockAmadeusEndpoints = {
+  RECOMMENDED_DESTINATIONS: 'fake endpoint type' as AmadeusEndpoint,
+}
 jest.mock('@/constants/serverActions', () => ({
-  MESSAGES: mockMessages,
   AMADEUS_ENDPOINTS: mockAmadeusEndpoints,
 }))
 
 const mockFetchAmadeus = jest.fn()
+const mockGetServerMessages = jest.fn()
 jest.mock('@/utils/api/helpers', () => ({
+  getServerActionMessages: mockGetServerMessages,
   fetchFromAmadeus: mockFetchAmadeus,
 }))
 
@@ -18,13 +22,6 @@ const mockGetAmadeusToken = jest.fn()
 jest.mock('@/utils/api/geoChart/getAmadeusToken', () => ({
   getAmadeusToken: mockGetAmadeusToken,
 }))
-
-const mockMessages = {
-  FETCH_RECOMMENDED_DESTINATIONS_REQUEST_FAILED: 'Failed to fetch API endpoint.',
-}
-const mockAmadeusEndpoints = {
-  RECOMMENDED_DESTINATIONS: 'fake endpoint type' as AmadeusEndpoint,
-}
 
 const inputCity = 'MAD'
 let response: ServerActionResponse<DestinationRecommendation> = {
@@ -64,12 +61,20 @@ const mockFetchAmadeusErrorResponse = {
   message: 'Data not returned successfully',
 }
 
+const mockGetServerMessagesResponse = {
+  success: false,
+  requestFailed: 'request failed',
+}
+
 describe('getDestinationRecommendations', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
     jest.resetAllMocks()
+    jest.resetModules()
+
     mockGetAmadeusToken.mockReturnValue(mockGetAmadeusTokenResponse)
     mockFetchAmadeus.mockReturnValue(mockFetchAmadeusSuccessResponse)
+    mockGetServerMessages.mockReturnValue(mockGetServerMessagesResponse)
+
     jest.spyOn(console, 'error').mockImplementation(() => {})
   })
 
@@ -141,19 +146,36 @@ describe('getDestinationRecommendations', () => {
         message: '',
       }
 
-      response = {
+      const responseUpdated = {
         success: false,
-        message: mockMessages.FETCH_RECOMMENDED_DESTINATIONS_REQUEST_FAILED,
+        message: mockGetServerMessagesResponse.requestFailed,
       }
+
       const { getRecommendedDestinations } = await import('@/utils/api/barChart')
       mockFetchAmadeus.mockReturnValue(mockFetchAmadeusErrorResponseUpdated)
       const result = await getRecommendedDestinations(inputCity)
 
-      expect(result).toStrictEqual(response)
+      expect(result).toStrictEqual(responseUpdated)
       expect(mockFetchAmadeus).toHaveBeenCalledTimes(1)
       expect(console.error).toHaveBeenCalledWith(
         `[API] Error fetching Amadeus recommended destinations: Unknown error`,
       )
+    })
+  })
+
+  it('should return an empty array when data is undefined', async () => {
+    const mockFetchAmadeusSuccessResponseUpdated = {
+      ...mockFetchAmadeusSuccessResponse,
+      data: undefined,
+    }
+    mockFetchAmadeus.mockReturnValue(mockFetchAmadeusSuccessResponseUpdated)
+
+    const { getRecommendedDestinations } = await import('@/utils/api/barChart')
+    const result = await getRecommendedDestinations(inputCity)
+
+    expect(result).toEqual({
+      success: true,
+      data: [],
     })
   })
 })

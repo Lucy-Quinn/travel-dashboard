@@ -44,8 +44,8 @@ export const MESSAGES = {
 
 export const AMADEUS_ENDPOINTS = {
   TOKEN: 'token',
+  RECOMMENDED_DESTINATIONS: 'recommendedDestinations',
   FLIGHT_INSPIRATION: 'flightInspiration',
   DEPARTURE_LOCATION: 'departureLocation',
   DESTINATION_LOCATIONS: 'destinationLocations',
-  RECOMMENDED_DESTINATIONS: 'recommendedDestinations',
 } as const

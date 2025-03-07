@@ -44,14 +44,14 @@ export const getDestinationLocations = async ({
         (iataCode !== locationDetails?.[0]?.iataCode &&
           iataCode !== locationDetails?.[0]?.address.cityCode)
       ) {
-        console.error(
-          '[Amadeus API] Error fetching destination locations:',
-          getServerActionMessages(AMADEUS_ENDPOINTS.DESTINATION_LOCATIONS).dataInvalid,
-        )
+        const errorMessage =
+          message ||
+          getServerActionMessages(AMADEUS_ENDPOINTS.DESTINATION_LOCATIONS).dataInvalid
+
+        console.error('[Amadeus API] Error fetching destination locations:', errorMessage)
         return {
           success: false,
-          message: getServerActionMessages(AMADEUS_ENDPOINTS.DESTINATION_LOCATIONS)
-            .dataInvalid,
+          message: errorMessage,
         }
       }
 

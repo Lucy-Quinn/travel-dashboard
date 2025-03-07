@@ -39,10 +39,14 @@ export const getAmadeusToken = async (): Promise<ServerActionResponse<AccessToke
   })
 
   if (!success) {
-    console.error(`[Amadeus API] Error fetching token: ${message || 'Unknown error'}`)
+    const errorMessage =
+      message || getServerActionMessages(AMADEUS_ENDPOINTS.TOKEN).requestFailed
+    console.error(
+      `[Amadeus API] Error fetching token: ${errorMessage || 'Unknown error'}`,
+    )
     return {
       success,
-      message,
+      message: errorMessage,
     }
   }
 

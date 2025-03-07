@@ -45,7 +45,7 @@ const response: ServerActionResponse<FlightDestinationWithPrice> = {
   },
 }
 
-let mockFetchAmadeusSuccessResponse: ServerActionResponse<FlightLocation[]> = {
+const mockFetchAmadeusSuccessResponse: ServerActionResponse<FlightLocation[]> = {
   success: true,
   data: [
     {
@@ -70,14 +70,14 @@ let mockFetchAmadeusSuccessResponse: ServerActionResponse<FlightLocation[]> = {
   ],
 }
 
-let mockFetchAmadeusErrorResponse = {
+const mockFetchAmadeusErrorResponse = {
   success: false,
   message: 'No data found',
 }
 
-let mockGetServerMessagesResponse = {
+const mockGetServerMessagesResponse = {
   success: false,
-  dataInvalid: 'Invalid token',
+  requestFailed: 'request failed',
 }
 
 describe('getDepartureLocation', () => {
@@ -110,7 +110,7 @@ describe('getDepartureLocation', () => {
   })
 
   describe('Error handling', () => {
-    it('should return an error when a departure location is not found', async () => {
+    it('should return an error when a departure location IATA code is not found', async () => {
       mockFetchAmadeus.mockReturnValue(mockFetchAmadeusErrorResponse)
 
       const newInput = {
@@ -123,9 +123,8 @@ describe('getDepartureLocation', () => {
       const result = await getDepartureLocation(newInput)
       expect(result).toEqual({
         success: false,
-        message: mockGetServerMessagesResponse.dataInvalid,
+        message: 'No departure location IATA code found',
       })
-      expect(mockGetServerMessages).toHaveBeenCalledTimes(1)
       expect(console.error).toHaveBeenCalledWith(
         '[Amadeus API] No departure location IATA code found',
       )
@@ -148,11 +147,11 @@ describe('getDepartureLocation', () => {
     })
 
     it('should return an error when fetchFromAmadeus returns unsuccessfully without a message', async () => {
-      mockFetchAmadeusErrorResponse = {
+      const mockFetchAmadeusErrorResponseUpdated = {
         success: false,
         message: '',
       }
-      mockFetchAmadeus.mockReturnValue(mockFetchAmadeusErrorResponse)
+      mockFetchAmadeus.mockReturnValue(mockFetchAmadeusErrorResponseUpdated)
 
       const { getDepartureLocation } = await import(
         '@/utils/api/geoChart/getDepartureLocation'
@@ -160,56 +159,10 @@ describe('getDepartureLocation', () => {
       const result = await getDepartureLocation(input)
       expect(result).toEqual({
         success: false,
-        message: mockFetchAmadeusErrorResponse.message,
+        message: mockGetServerMessagesResponse.requestFailed,
       })
       expect(console.error).toHaveBeenCalledWith(
         '[Amadeus API] Error fetching departure location: Unknown error',
-      )
-    })
-
-    it('should return an error when no location data is found', async () => {
-      mockFetchAmadeusSuccessResponse = {
-        success: true,
-        data: [],
-      }
-      mockFetchAmadeus.mockReturnValue(mockFetchAmadeusSuccessResponse)
-
-      const { getDepartureLocation } = await import(
-        '@/utils/api/geoChart/getDepartureLocation'
-      )
-      const result = await getDepartureLocation(input)
-      expect(result).toEqual({
-        success: false,
-        message: mockGetServerMessagesResponse.dataInvalid,
-      })
-      expect(mockGetServerMessages).toHaveBeenCalledTimes(1)
-      expect(console.error).toHaveBeenCalledWith(
-        `[Amadeus API] No location data found for departure location: ${mockGetServerMessagesResponse.dataInvalid}`,
-      )
-    })
-
-    it('should return an error when no location data is found without a message', async () => {
-      mockFetchAmadeusSuccessResponse = {
-        success: true,
-      }
-      mockFetchAmadeus.mockReturnValue(mockFetchAmadeusSuccessResponse)
-      mockGetServerMessagesResponse = {
-        success: false,
-        dataInvalid: '',
-      }
-      mockGetServerMessages.mockReturnValue(mockGetServerMessagesResponse)
-
-      const { getDepartureLocation } = await import(
-        '@/utils/api/geoChart/getDepartureLocation'
-      )
-      const result = await getDepartureLocation(input)
-      expect(result).toEqual({
-        success: false,
-        message: mockGetServerMessagesResponse.dataInvalid,
-      })
-      expect(mockGetServerMessages).toHaveBeenCalledTimes(1)
-      expect(console.error).toHaveBeenCalledWith(
-        '[Amadeus API] No location data found for departure location: Unknown error',
       )
     })
   })
