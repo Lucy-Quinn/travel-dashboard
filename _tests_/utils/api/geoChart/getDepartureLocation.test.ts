@@ -5,7 +5,11 @@ import type {
   ServerActionResponse,
 } from '@/types/amadeus'
 import type { GetDepartureLocationProps } from '@/utils/api/geoChart/getDepartureLocation'
-
+import {
+  flightData,
+  mockFlightDestinationWithPriceData,
+  mockFlightLocationData,
+} from '../constants'
 const mockAmadeusEndpoints = {
   DEPARTURE_LOCATION: 'departure-location' as AmadeusEndpoint,
 }
@@ -22,71 +26,45 @@ jest.doMock('@/utils/api/helpers', () => ({
 
 const input: GetDepartureLocationProps = {
   departureLocation: 'MAD',
-  flightData: [
-    {
-      iataCode: 'MAD',
-      total: '100',
-    },
-  ],
+  flightData: [flightData[0]],
   token: 'fake token',
 }
 
 const response: ServerActionResponse<FlightDestinationWithPrice> = {
   success: true,
   data: {
-    airportName: 'Madrid Barajas Airport',
-    cityName: 'Madrid',
-    geoCode: {
-      latitude: 40.4719,
-      longitude: -3.5626,
-    },
-    iataCode: 'MAD',
+    ...mockFlightDestinationWithPriceData[0],
     total: '0',
   },
 }
 
-const mockFetchAmadeusSuccessResponse: ServerActionResponse<FlightLocation[]> = {
-  success: true,
-  data: [
-    {
-      type: 'airport',
-      subType: 'airport',
-      name: 'Madrid Barajas Airport',
-      detailedName: 'Madrid Barajas Airport',
-      id: 'MAD',
-      iataCode: 'MAD',
-      geoCode: {
-        latitude: 40.4719,
-        longitude: -3.5626,
-      },
-      address: {
-        cityName: 'Madrid',
-        cityCode: 'MAD',
-        countryName: 'Spain',
-        countryCode: 'ES',
-        regionCode: 'MD',
+const mockResponses = {
+  amadeus: {
+    success: {
+      success: true,
+      data: [mockFlightLocationData[0]],
+    } as ServerActionResponse<FlightLocation[]>,
+    error: {
+      noData: {
+        success: false,
+        message: 'No data found',
       },
     },
-  ],
+  },
+  serverMessages: {
+    error: {
+      success: false,
+      requestFailed: 'request failed',
+    },
+  },
 }
-
-const mockFetchAmadeusErrorResponse = {
-  success: false,
-  message: 'No data found',
-}
-
-const mockGetServerMessagesResponse = {
-  success: false,
-  requestFailed: 'request failed',
-}
-
 describe('getDepartureLocation', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     jest.resetModules()
 
-    mockFetchAmadeus.mockReturnValue(mockFetchAmadeusSuccessResponse)
-    mockGetServerMessages.mockReturnValue(mockGetServerMessagesResponse)
+    mockFetchAmadeus.mockReturnValue(mockResponses.amadeus.success)
+    mockGetServerMessages.mockReturnValue(mockResponses.serverMessages.error)
 
     jest.spyOn(console, 'error').mockImplementation(() => {})
     jest.spyOn(console, 'log').mockImplementation(() => {})
@@ -111,7 +89,7 @@ describe('getDepartureLocation', () => {
 
   describe('Error handling', () => {
     it('should return an error when a departure location IATA code is not found', async () => {
-      mockFetchAmadeus.mockReturnValue(mockFetchAmadeusErrorResponse)
+      mockFetchAmadeus.mockReturnValue(mockResponses.amadeus.error.noData)
 
       const newInput = {
         ...input,
@@ -131,22 +109,19 @@ describe('getDepartureLocation', () => {
     })
 
     it('should return an error when fetchFromAmadeus returns unsuccessfully', async () => {
-      mockFetchAmadeus.mockReturnValue(mockFetchAmadeusErrorResponse)
+      mockFetchAmadeus.mockReturnValue(mockResponses.amadeus.error.noData)
 
       const { getDepartureLocation } = await import(
         '@/utils/api/geoChart/getDepartureLocation'
       )
       const result = await getDepartureLocation(input)
-      expect(result).toEqual({
-        success: false,
-        message: mockFetchAmadeusErrorResponse.message,
-      })
+      expect(result).toEqual(mockResponses.amadeus.error.noData)
       expect(console.error).toHaveBeenCalledWith(
         '[Amadeus API] Error fetching departure location: No data found',
       )
     })
 
-    it('should return an error when fetchFromAmadeus returns unsuccessfully without a message', async () => {
+    it('should return an error when fetchFromAmadeus returns unsuccessfully without a message response', async () => {
       const mockFetchAmadeusErrorResponseUpdated = {
         success: false,
         message: '',
@@ -159,8 +134,9 @@ describe('getDepartureLocation', () => {
       const result = await getDepartureLocation(input)
       expect(result).toEqual({
         success: false,
-        message: mockGetServerMessagesResponse.requestFailed,
+        message: mockResponses.serverMessages.error.requestFailed,
       })
+
       expect(console.error).toHaveBeenCalledWith(
         '[Amadeus API] Error fetching departure location: Unknown error',
       )

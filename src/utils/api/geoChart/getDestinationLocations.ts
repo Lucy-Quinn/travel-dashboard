@@ -5,9 +5,9 @@ import type {
   FlightLocation,
   ServerActionResponse,
 } from '@/types/amadeus'
-import { fetchFromAmadeus, getServerActionMessages } from '../helpers'
+import { fetchFromAmadeus, getServerActionMessages } from '@/utils/api/helpers'
 
-interface GetDestinationLocationsProps {
+export interface GetDestinationLocationsProps {
   flightData: FlightDestinationPrice[]
   token: string
 }
@@ -30,7 +30,10 @@ export const getDestinationLocations = async ({
       })
 
       if (!success) {
-        console.error('[Amadeus API] Error fetching destination locations:', message)
+        console.error(
+          '[Amadeus API] Error fetching destination locations:',
+          message || 'Failed to fetch destination locations',
+        )
         return {
           success,
           message,
@@ -65,29 +68,27 @@ export const getDestinationLocations = async ({
     }),
   )
 
-  const successfulFlights = flightDetails
-    .filter(
-      (
-        result,
-      ): result is PromiseFulfilledResult<{
-        success: true
-        data: {
-          iataCode: string
-          total: string
-          airportName: string
-          geoCode: { latitude: number; longitude: number }
-          cityName: string
-        }
-      }> => {
-        return result.status === 'fulfilled' && result.value.success === true
-      },
-    )
-    .map((result) => result.value.data)
+  const fulfilledResults = flightDetails
+    .filter((result) => result.status === 'fulfilled')
+    .map((result) => result.value)
+
+  const successfulResults = fulfilledResults.filter(
+    (result): result is { success: true; data: FlightDestinationWithPrice } =>
+      result.success === true,
+  )
+
+  if (successfulResults.length === 0 && fulfilledResults.length > 0) {
+    const firstError = fulfilledResults[0]
+    return {
+      success: false,
+      message: firstError.message || 'Failed to fetch destination locations',
+    }
+  }
 
   console.log('[Amadeus API] Destination locations fetched successfully')
 
   return {
     success: true,
-    data: successfulFlights,
+    data: successfulResults.map((result) => result.data),
   }
 }

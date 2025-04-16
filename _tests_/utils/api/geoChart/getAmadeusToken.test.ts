@@ -26,19 +26,25 @@ const response: ServerActionResponse<AccessToken> = {
   data: 'fake token',
 }
 
-const mockFetchAmadeusSuccessResponse = {
-  success: true,
-  data: [{ access_token: 'fake token' }],
-}
-
-const mockFetchAmadeusErrorResponse = {
-  success: false,
-  message: 'Token not returned successfully',
-}
-
-const mockGetServerMessagesResponse = {
-  success: false,
-  dataInvalid: 'Invalid token',
+const mockResponses = {
+  amadeus: {
+    success: {
+      success: true,
+      data: [{ access_token: 'fake token' }],
+    },
+    error: {
+      noData: {
+        success: false,
+        message: 'Token not returned successfully',
+      },
+    },
+  },
+  serverMessages: {
+    error: {
+      success: false,
+      dataInvalid: 'Invalid token',
+    },
+  },
 }
 
 describe('getAmadeusToken', () => {
@@ -46,8 +52,8 @@ describe('getAmadeusToken', () => {
     jest.resetAllMocks()
     jest.resetModules() // Clears all imported modules from cache (including the Amadeus config)
 
-    mockFetchFromAmadeus.mockReturnValue(mockFetchAmadeusSuccessResponse)
-    mockGetServerMessages.mockReturnValue(mockGetServerMessagesResponse)
+    mockFetchFromAmadeus.mockReturnValue(mockResponses.amadeus.success)
+    mockGetServerMessages.mockReturnValue(mockResponses.serverMessages.error)
 
     jest.spyOn(console, 'error').mockImplementation(() => {})
     jest.spyOn(console, 'log').mockImplementation(() => {})
@@ -109,24 +115,21 @@ describe('getAmadeusToken', () => {
     })
 
     it('should return an error when fetchFromAmadeus returns unsuccessfully', async () => {
-      mockFetchFromAmadeus.mockReturnValue(mockFetchAmadeusErrorResponse)
+      mockFetchFromAmadeus.mockReturnValue(mockResponses.amadeus.error.noData)
 
       const { getAmadeusToken } = await import('@/utils/api/geoChart/getAmadeusToken')
       const result = await getAmadeusToken()
-      expect(result).toEqual({
-        success: false,
-        message: mockFetchAmadeusErrorResponse.message,
-      })
+      expect(result).toEqual(mockResponses.amadeus.error.noData)
       expect(mockFetchFromAmadeus).toHaveBeenCalledTimes(1)
       expect(console.error).toHaveBeenCalledWith(
-        `[Amadeus API] Error fetching token: ${mockFetchAmadeusErrorResponse.message}`,
+        `[Amadeus API] Error fetching token: ${mockResponses.amadeus.error.noData.message}`,
       )
       expect(result.data).toBeUndefined()
     })
 
     it('should return an error when fetchFromAmadeus returns unsuccessfully and `message` is missing', async () => {
       const mockFetchAmadeusErrorResponseUpdated = {
-        ...mockFetchAmadeusErrorResponse,
+        ...mockResponses.amadeus.error.noData,
         message: '',
       }
       mockFetchFromAmadeus.mockReturnValue(mockFetchAmadeusErrorResponseUpdated)
@@ -150,16 +153,16 @@ describe('getAmadeusToken', () => {
       const result = await getAmadeusToken()
       expect(result).toEqual({
         success: false,
-        message: 'Invalid token',
+        message: mockResponses.serverMessages.error.dataInvalid,
       })
       expect(mockGetServerMessages).toHaveBeenCalledTimes(1)
       expect(console.error).toHaveBeenCalledWith(
-        `[Amadeus API] Error fetching token: ${mockGetServerMessagesResponse.dataInvalid}`,
+        `[Amadeus API] Error fetching token: ${mockResponses.serverMessages.error.dataInvalid}`,
       )
     })
     it('should handle empty `dataInvalid` response from getServerActionMessages gracefully', async () => {
       const mockGetServerMessagesResponseUpdated = {
-        ...mockGetServerMessagesResponse,
+        ...mockResponses.serverMessages.error,
         dataInvalid: '',
       }
       mockGetServerMessages.mockReturnValue(mockGetServerMessagesResponseUpdated)

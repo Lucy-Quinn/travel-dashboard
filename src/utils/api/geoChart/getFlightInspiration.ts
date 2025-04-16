@@ -4,7 +4,7 @@ import type {
   FlightInspiration,
   ServerActionResponse,
 } from '@/types/amadeus'
-import { fetchFromAmadeus, getServerActionMessages } from '../helpers'
+import { fetchFromAmadeus, getServerActionMessages } from '@/utils/api/helpers'
 
 interface GetFlightInspirationProps {
   city: string

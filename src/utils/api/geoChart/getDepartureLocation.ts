@@ -5,7 +5,7 @@ import type {
   FlightLocation,
   ServerActionResponse,
 } from '@/types/amadeus'
-import { fetchFromAmadeus, getServerActionMessages } from '../helpers'
+import { fetchFromAmadeus, getServerActionMessages } from '@/utils/api/helpers'
 
 export interface GetDepartureLocationProps {
   departureLocation: string
