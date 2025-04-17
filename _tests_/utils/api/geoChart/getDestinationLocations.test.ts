@@ -1,4 +1,4 @@
-import {
+import type {
   AmadeusEndpoint,
   FlightDestinationWithPrice,
   FlightLocation,
@@ -6,10 +6,11 @@ import {
 } from '@/types/amadeus'
 import { GetDestinationLocationsProps } from '@/utils/api/geoChart/getDestinationLocations'
 import {
-  flightData,
+  mockFlightData as flightData,
   mockFlightDestinationWithPriceData,
   mockFlightLocationData,
 } from '../constants'
+
 const mockAmadeusEndpoints = {
   DESTINATION_LOCATIONS: 'destination-locations' as AmadeusEndpoint,
 }

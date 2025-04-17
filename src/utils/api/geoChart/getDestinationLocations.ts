@@ -1,14 +1,14 @@
 import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
 import type {
-  FlightDestinationPrice,
   FlightDestinationWithPrice,
+  FlightIataCodeAndPrice,
   FlightLocation,
   ServerActionResponse,
 } from '@/types/amadeus'
 import { fetchFromAmadeus, getServerActionMessages } from '@/utils/api/helpers'
 
 export interface GetDestinationLocationsProps {
-  flightData: FlightDestinationPrice[]
+  flightData: FlightIataCodeAndPrice[]
   token: string
 }
 

@@ -4,7 +4,7 @@ export const mockAmadeusConfig = {
   apiUrl: 'fakeApiUrl',
 }
 
-export const flightData = [
+export const mockFlightData = [
   {
     iataCode: 'MAD',
     total: '100',
@@ -23,7 +23,7 @@ export const mockFlightDestinationWithPriceData = [
       latitude: 40.4719,
       longitude: -3.5626,
     },
-    ...flightData[0],
+    ...mockFlightData[0],
   },
   {
     airportName: 'Rome FCO Airport',
@@ -32,7 +32,7 @@ export const mockFlightDestinationWithPriceData = [
       latitude: 41.8003,
       longitude: 12.2388,
     },
-    ...flightData[1],
+    ...mockFlightData[1],
   },
 ]
 
@@ -73,6 +73,62 @@ export const mockFlightLocationData = [
       countryName: 'Italy',
       countryCode: 'IT',
       regionCode: 'RM',
+    },
+  },
+]
+
+export const mockFlightInspirationData = [
+  {
+    type: 'flight-destination',
+    origin: 'MIA',
+    destination: 'MAD',
+    departureDate: '2024-01-01',
+    returnDate: '2024-01-02',
+    price: {
+      total: '100',
+    },
+  },
+  {
+    type: 'flight-destination',
+    origin: 'MIA',
+    destination: 'FCO',
+    departureDate: '2024-01-01',
+    returnDate: '2024-01-02',
+    price: {
+      total: '81.19',
+    },
+  },
+]
+
+export const mockFlightInspirationDataWithAirport = [
+  {
+    type: 'flight-destination',
+    origin: 'LHR',
+    destination: 'MAD',
+    departureDate: '2024-01-01',
+    returnDate: '2024-01-02',
+    price: {
+      total: '100',
+    },
+  },
+  {
+    type: 'flight-destination',
+    origin: 'LHR',
+    destination: 'FCO',
+    departureDate: '2024-01-01',
+    returnDate: '2024-01-02',
+    price: {
+      total: '81.19',
+    },
+  },
+  {
+    type: 'flight-destination',
+    origin: 'LGW',
+    destination: 'MAD',
+    departureDate: '2024-01-01',
+    returnDate: '2024-01-02',
+    price: {
+      total: '100',
     },
   },
 ]

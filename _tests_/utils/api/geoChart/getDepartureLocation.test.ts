@@ -6,7 +6,7 @@ import type {
 } from '@/types/amadeus'
 import type { GetDepartureLocationProps } from '@/utils/api/geoChart/getDepartureLocation'
 import {
-  flightData,
+  mockFlightData as flightData,
   mockFlightDestinationWithPriceData,
   mockFlightLocationData,
 } from '../constants'

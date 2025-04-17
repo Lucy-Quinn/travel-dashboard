@@ -1,14 +1,14 @@
 import { AMADEUS_ENDPOINTS } from '@/constants/serverActions'
 import type {
-  FlightDestinationPrice,
+  FlightIataCodeAndPrice,
   FlightInspiration,
   ServerActionResponse,
 } from '@/types/amadeus'
 import { fetchFromAmadeus, getServerActionMessages } from '@/utils/api/helpers'
 
-interface GetFlightInspirationProps {
+export interface GetFlightInspirationProps {
   city: string
-  airport: string
+  airport?: string
   token: string
 }
 
@@ -17,7 +17,7 @@ export const getFlightInspiration = async ({
   airport,
   token,
 }: GetFlightInspirationProps): Promise<
-  ServerActionResponse<FlightDestinationPrice[]>
+  ServerActionResponse<FlightIataCodeAndPrice[]>
 > => {
   console.log(
     `[Amadeus API] Fetching flight inspiration search results from origin: ${city}`,
@@ -33,11 +33,10 @@ export const getFlightInspiration = async ({
   if (!success || !data || !data[0]) {
     const errorMessage =
       message ||
-      getServerActionMessages(AMADEUS_ENDPOINTS.FLIGHT_INSPIRATION).requestFailed
-    console.error(
-      '[Amadeus API] Error fetching flight inspiration:',
-      errorMessage || 'Unknown error',
-    )
+      (!success
+        ? getServerActionMessages(AMADEUS_ENDPOINTS.FLIGHT_INSPIRATION).requestFailed
+        : getServerActionMessages(AMADEUS_ENDPOINTS.FLIGHT_INSPIRATION).dataInvalid)
+    console.error('[Amadeus API] Error fetching flight inspiration:', errorMessage)
     return {
       success,
       message: errorMessage,
@@ -46,6 +45,7 @@ export const getFlightInspiration = async ({
 
   let flightData: FlightInspiration[] = data
 
+  // Filter flights to match specific airport (e.g., LHR vs LGW for London)
   if (airport) {
     flightData = flightData.filter(({ origin }) => origin === airport)
     if (flightData.length === 0) {
@@ -66,7 +66,7 @@ export const getFlightInspiration = async ({
     }),
   )
 
-  const flightDataIncludingDepartureLocation: FlightDestinationPrice[] = [
+  const flightDataIncludingDepartureLocation: FlightIataCodeAndPrice[] = [
     { iataCode: airport ?? city, total: '0' },
     ...flightDataWithSelectedFields,
   ]

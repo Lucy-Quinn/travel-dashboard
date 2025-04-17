@@ -43,7 +43,7 @@ export type FlightInspiration = {
   }
 }
 
-export type FlightDestinationPrice = {
+export type FlightIataCodeAndPrice = {
   iataCode: string
   total: string
 }
